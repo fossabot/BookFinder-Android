@@ -1,20 +1,50 @@
 apply plugin: 'com.android.application'
+apply from: "$rootDir/common-methods.gradle"
+
+final userName = System.getProperty("user.name")
+final credentialsFolder = getCredentialsFolder(userName)
+
+final releaseKeystorePath = credentialsFolder + "release-keystore.properties"
+final releaseKeystoreProperties = getKeystoreProperties(releaseKeystorePath)
+final debugKeystorePath = credentialsFolder + "debug-keystore.properties"
+final debugKeystoreProperties = getKeystoreProperties(debugKeystorePath)
+
 
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "dev.suhockii.bookfinder"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file(credentialsFolder + releaseKeystoreProperties['file'])
+            keyAlias releaseKeystoreProperties['alias']
+            keyPassword releaseKeystoreProperties['password']
+            storePassword releaseKeystoreProperties['keystorePassword']
+        }
+        debug {
+            storeFile file(credentialsFolder + debugKeystoreProperties['file'])
+            keyAlias debugKeystoreProperties['alias']
+            keyPassword debugKeystoreProperties['password']
+            storePassword debugKeystoreProperties['keystorePassword']
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
