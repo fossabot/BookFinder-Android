@@ -1,0 +1,5 @@
+android {
+    defaultConfig {
+        buildConfigField 'String', 'GOOGLE_DRIVE_URL', "\"$googleDriveUrl\""
+    }
+}

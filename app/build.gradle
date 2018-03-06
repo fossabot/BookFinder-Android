@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/common-methods.gradle"
+apply from: 'build-config.gradle'
 
 final userName = System.getProperty("user.name")
 final credentialsFolder = getCredentialsFolder(userName)
@@ -9,16 +13,21 @@ final releaseKeystoreProperties = getKeystoreProperties(releaseKeystorePath)
 final debugKeystorePath = credentialsFolder + "debug-keystore.properties"
 final debugKeystoreProperties = getKeystoreProperties(debugKeystorePath)
 
-
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "dev.suhockii.bookfinder"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [toothpick_registry_package_name: 'dev.suhockii.bookfinder']
+            }
+        }
     }
     signingConfigs {
         release {
@@ -41,18 +50,58 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+ext {
+    support_library_version = "27.0.2"
+    moxy_version = "1.5.3"
+    toothpick_version = "1.1.2"
+    retrofit_version = "2.3.0"
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation(
+            "com.android.support:appcompat-v7:$support_library_version",
+            "org.jetbrains.anko:anko:$anko_version",
+            "com.arello-mobile:moxy-compiler:$moxy_version",
+            "com.arello-mobile:moxy-app-compat:$moxy_version",
+            "com.squareup.retrofit2:retrofit:$retrofit_version",
+            "com.squareup.retrofit2:converter-gson:$retrofit_version",
+            "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpick_version",
+            "ru.terrakok.cicerone:cicerone:3.0.0",
+            "com.google.code.gson:gson:2.8.2",
+            "com.squareup.okhttp3:logging-interceptor:3.6.0",
+            "com.github.bumptech.glide:glide:4.3.1",
+            "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0"
+    )
+    testImplementation(
+            "junit:junit:4.12",
+            "org.mockito:mockito-core:2.8.9",
+            "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
+    )
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy_version"
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    }
 }
