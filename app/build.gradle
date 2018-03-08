@@ -63,15 +63,11 @@ android {
     }
     lintOptions {
         abortOnError true
+        checkReleaseBuilds false
+        disable 'unchecked'
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-    }
-}
-
-gradle.projectsEvaluated {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:-unchecked"
     }
 }
 
