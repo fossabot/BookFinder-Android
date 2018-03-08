@@ -26,6 +26,7 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [toothpick_registry_package_name: 'dev.suhockii.bookfinder']
+                includeCompileClasspath = true
             }
         }
     }
@@ -46,12 +47,14 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
         }
         debug {
             applicationIdSuffix ".debug"
+            debuggable true
         }
     }
     compileOptions {
@@ -78,26 +81,34 @@ ext {
 
 dependencies {
     implementation(
-            "com.android.support:appcompat-v7:$support_library_version",
             "org.jetbrains.anko:anko:$anko_version",
+            "com.android.support:appcompat-v7:$support_library_version",
             "com.arello-mobile:moxy-compiler:$moxy_version",
             "com.arello-mobile:moxy-app-compat:$moxy_version",
             "com.squareup.retrofit2:retrofit:$retrofit_version",
             "com.squareup.retrofit2:converter-gson:$retrofit_version",
-            "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpick_version",
-            "ru.terrakok.cicerone:cicerone:3.0.0",
-            "com.google.code.gson:gson:2.8.2",
             "com.squareup.okhttp3:logging-interceptor:3.6.0",
+            "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0",
+            "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpick_version",
+            "com.google.code.gson:gson:2.8.2",
             "com.github.bumptech.glide:glide:4.3.1",
-            "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0"
+            "ru.terrakok.cicerone:cicerone:3.0.0",
     )
     testImplementation(
             "junit:junit:4.12",
             "org.mockito:mockito-core:2.8.9",
             "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
     )
-    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy_version"
+    kapt(
+            "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version",
+            "com.arello-mobile:moxy-compiler:$moxy_version",
+    )
+}
+
+kapt {
+    arguments {
+        arg("moxyReflectorPackage", "dev.suhockii.bookfinder")
+    }
 }
 
 configurations.all {
