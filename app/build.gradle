@@ -62,9 +62,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
-        abortOnError true
-        checkReleaseBuilds false
-        disable 'unchecked'
+        abortOnError false
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

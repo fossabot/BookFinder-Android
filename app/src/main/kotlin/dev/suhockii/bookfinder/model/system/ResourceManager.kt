@@ -1,4 +1,4 @@
-package ru.terrakok.gitlabclient.model.system
+package dev.suhockii.bookfinder.model.system
 
 import android.content.Context
 import javax.inject.Inject
