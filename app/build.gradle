@@ -16,7 +16,7 @@ final debugKeystoreProperties = getKeystoreProperties(debugKeystorePath)
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "dev.suhockii.bookfinder"
+        applicationId appId
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
@@ -25,7 +25,7 @@ android {
         vectorDrawables.useSupportLibrary true
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [toothpick_registry_package_name: 'dev.suhockii.bookfinder']
+                arguments = [toothpick_registry_package_name: appId]
                 includeCompileClasspath = true
             }
         }
@@ -60,6 +60,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError true
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -103,12 +106,6 @@ dependencies {
             "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version",
             "com.arello-mobile:moxy-compiler:$moxy_version",
     )
-}
-
-kapt {
-    arguments {
-        arg("moxyReflectorPackage", "dev.suhockii.bookfinder")
-    }
 }
 
 configurations.all {
