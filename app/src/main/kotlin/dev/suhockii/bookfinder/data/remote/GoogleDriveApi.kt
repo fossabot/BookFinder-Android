@@ -1,5 +1,7 @@
-package dev.suhockii.bookfinder.model.data.server
+package dev.suhockii.bookfinder.data.remote
 
+import dev.suhockii.bookfinder.util.RequestHeader
+import dev.suhockii.bookfinder.util.RequestUrl
 import kotlinx.coroutines.experimental.Deferred
 import okhttp3.ResponseBody
 import retrofit2.http.GET

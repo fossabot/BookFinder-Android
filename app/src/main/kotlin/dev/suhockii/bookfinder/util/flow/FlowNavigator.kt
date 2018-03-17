@@ -1,4 +1,4 @@
-package ru.terrakok.gitlabclient.model.system.flow
+package dev.suhockii.bookfinder.util.flow
 
 import android.app.Activity
 import android.content.Intent

@@ -1,21 +1,17 @@
 package dev.suhockii.bookfinder.di.module
 
 import android.content.Context
-import dev.suhockii.bookfinder.di.PrimitiveWrapper
-import dev.suhockii.bookfinder.di.qualifier.DefaultPageSize
-import dev.suhockii.bookfinder.model.system.ResourceManager
+import dev.suhockii.bookfinder.util.ResourceManager
+import dev.suhockii.bookfinder.util.flow.FlowRouter
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
-import ru.terrakok.gitlabclient.model.system.flow.FlowRouter
 import toothpick.config.Module
 
 class AppModule(context: Context) : Module() {
     init {
         //Global
         bind(Context::class.java).toInstance(context)
-        bind(PrimitiveWrapper::class.java).withName(DefaultPageSize::class.java)
-            .toInstance(PrimitiveWrapper(20))
         bind(ResourceManager::class.java).singletonInScope()
 
         //Navigation

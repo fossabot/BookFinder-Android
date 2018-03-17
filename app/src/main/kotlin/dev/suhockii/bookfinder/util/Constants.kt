@@ -1,4 +1,4 @@
-package dev.suhockii.bookfinder.model.data.server
+package dev.suhockii.bookfinder.util
 
 object RequestUrl {
     const val USER_CONTEXT: String = "/uc"

@@ -8,10 +8,8 @@ apply from: 'build-config.gradle'
 final userName = System.getProperty("user.name")
 final credentialsFolder = getCredentialsFolder(userName)
 
-final releaseKeystorePath = credentialsFolder + "release-keystore.properties"
-final releaseKeystoreProperties = getKeystoreProperties(releaseKeystorePath)
-final debugKeystorePath = credentialsFolder + "debug-keystore.properties"
-final debugKeystoreProperties = getKeystoreProperties(debugKeystorePath)
+final releaseKeystoreProperties = getKeystoreProperties(credentialsFolder + "release-keystore.properties")
+final debugKeystoreProperties = getKeystoreProperties(credentialsFolder + "debug-keystore.properties")
 
 android {
     compileSdkVersion 27
@@ -80,6 +78,7 @@ ext {
     moxy_version = "1.5.3"
     toothpick_version = "1.1.2"
     retrofit_version = "2.3.0"
+    room_version = "1.0.0"
 }
 
 dependencies {
@@ -96,6 +95,7 @@ dependencies {
             "com.google.code.gson:gson:2.8.2",
             "com.github.bumptech.glide:glide:4.3.1",
             "ru.terrakok.cicerone:cicerone:3.0.0",
+            "android.arch.persistence.room:runtime:$room_version",
     )
     testImplementation(
             "junit:junit:4.12",
@@ -105,6 +105,7 @@ dependencies {
     kapt(
             "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version",
             "com.arello-mobile:moxy-compiler:$moxy_version",
+            "android.arch.persistence.room:compiler:$room_version",
     )
 }
 

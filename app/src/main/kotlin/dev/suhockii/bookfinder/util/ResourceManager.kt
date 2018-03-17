@@ -1,4 +1,4 @@
-package dev.suhockii.bookfinder.model.system
+package dev.suhockii.bookfinder.util
 
 import android.content.Context
 import javax.inject.Inject

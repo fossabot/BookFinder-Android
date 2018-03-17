@@ -2,8 +2,8 @@ package dev.suhockii.bookfinder.di.provider
 
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
+import dev.suhockii.bookfinder.data.remote.GoogleDriveApi
 import dev.suhockii.bookfinder.di.qualifier.GoogleDrivePath
-import dev.suhockii.bookfinder.model.data.server.GoogleDriveApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
