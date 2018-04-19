@@ -4,13 +4,15 @@ import com.google.gson.Gson
 import dev.suhockii.bookfinder.BuildConfig
 import dev.suhockii.bookfinder.data.remote.GoogleDriveApi
 import dev.suhockii.bookfinder.data.repository.GoogleDriveRepository
+import dev.suhockii.bookfinder.data.repository.StorageRepository
 import dev.suhockii.bookfinder.di.provider.ApiProvider
 import dev.suhockii.bookfinder.di.provider.GsonProvider
 import dev.suhockii.bookfinder.di.provider.OkHttpClientProvider
 import dev.suhockii.bookfinder.di.qualifier.DatabaseFileId
 import dev.suhockii.bookfinder.di.qualifier.GoogleDrivePath
-import dev.suhockii.bookfinder.domain.GoogleDriveInteractor
-import dev.suhockii.bookfinder.domain.repositories.FileRepository
+import dev.suhockii.bookfinder.di.qualifier.LocalRepository
+import dev.suhockii.bookfinder.di.qualifier.RemoteRepository
+import dev.suhockii.bookfinder.domain.repository.FileRepository
 import okhttp3.OkHttpClient
 import toothpick.config.Module
 
@@ -24,7 +26,7 @@ class ServerModule : Module() {
         bind(OkHttpClient::class.java).toProvider(OkHttpClientProvider::class.java).providesSingletonInScope()
 
         //Repository
-        bind(FileRepository::class.java).to(GoogleDriveRepository::class.java)
-        bind(GoogleDriveInteractor::class.java)
+        bind(FileRepository::class.java).withName(RemoteRepository::class.java).to(GoogleDriveRepository::class.java)
+        bind(FileRepository::class.java).withName(LocalRepository::class.java).to(StorageRepository::class.java)
     }
 }

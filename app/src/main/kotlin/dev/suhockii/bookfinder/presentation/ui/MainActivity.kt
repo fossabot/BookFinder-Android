@@ -45,7 +45,6 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
     fun tryLogin(ui: AnkoContext<MainActivity>) {
         ui.doAsync {
             Thread.sleep(5000)
-
             activityUiThread {
                 val builder = AlertDialog.Builder(this@MainActivity)
                 builder.setTitle("Важное сообщение!")

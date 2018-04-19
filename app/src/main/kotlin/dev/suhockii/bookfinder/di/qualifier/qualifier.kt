@@ -4,3 +4,7 @@ import javax.inject.Qualifier
 
 @Qualifier annotation class DatabaseFileId
 @Qualifier annotation class GoogleDrivePath
+@Qualifier annotation class DownloadDirectoryPath
+@Qualifier annotation class DocumentsDirectoryPath
+@Qualifier annotation class RemoteRepository
+@Qualifier annotation class LocalRepository

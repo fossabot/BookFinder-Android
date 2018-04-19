@@ -2,22 +2,26 @@ package dev.suhockii.bookfinder.presentation.mvp.main
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import dev.suhockii.bookfinder.domain.GoogleDriveInteractor
+import dev.suhockii.bookfinder.di.qualifier.DatabaseFileId
+import dev.suhockii.bookfinder.domain.FileInteractor
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.wtf
+import org.jetbrains.anko.info
 import javax.inject.Inject
 
 @InjectViewState
 class MainActivityPresenter @Inject constructor(
-        private val googleDriveInteractor: GoogleDriveInteractor
+    private val fileInteractor: FileInteractor,
+    @DatabaseFileId private val fileId: String
 ) : MvpPresenter<MainActivityView>(), AnkoLogger {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         async {
-            val responseBody = googleDriveInteractor.downloadDatabase().await()
-            wtf(responseBody.contentLength())
+            val (fileName, data) = fileInteractor.downloadDatabaseFile(fileId).await()
+            val zipFile = fileInteractor.saveDatabaseFile(fileName, data).await()
+            val unzippedFile = fileInteractor.unzip(zipFile, zipFile.parentFile).await()
+            info { unzippedFile.length() }
         }
     }
 }

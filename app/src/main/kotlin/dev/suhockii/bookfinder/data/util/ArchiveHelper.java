@@ -1,4 +1,4 @@
-package dev.suhockii.bookfinder.util.extension;
+package dev.suhockii.bookfinder.data.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-class Utils {
+class ArchiveHelper {
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public static void unZip(File zipFile, File targetDirectory) throws IOException {
         ZipInputStream zis = new ZipInputStream(
