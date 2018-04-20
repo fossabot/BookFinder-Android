@@ -6,7 +6,7 @@ import android.arch.persistence.room.Query
 import dev.suhockii.bookfinder.data.local.entity.BookEntity
 
 @Dao
-interface BooksDao {
+interface BookDao {
 
     @Insert
     fun insertAll(books: List<BookEntity>)

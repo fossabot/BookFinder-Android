@@ -1,4 +1,4 @@
-package dev.suhockii.bookfinder.data.excel.entity
+package dev.suhockii.bookfinder.data.xls.entity
 
 import dev.suhockii.bookfinder.data.local.entity.BookEntity
 import dev.suhockii.bookfinder.domain.model.XlsDocument

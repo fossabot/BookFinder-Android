@@ -1,8 +1,6 @@
 package dev.suhockii.bookfinder.presentation.ui;
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.EditText
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -12,6 +10,7 @@ import dev.suhockii.bookfinder.di.DI
 import dev.suhockii.bookfinder.presentation.mvp.main.MainActivityPresenter
 import dev.suhockii.bookfinder.presentation.mvp.main.MainActivityView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import toothpick.Toothpick
 
@@ -43,17 +42,17 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
     }
 
     fun tryLogin(ui: AnkoContext<MainActivity>) {
-        ui.doAsync {
+        ui.async {
             Thread.sleep(5000)
-            activityUiThread {
-                val builder = AlertDialog.Builder(this@MainActivity)
-                builder.setTitle("Важное сообщение!")
-                        .setMessage("Покормите кота!")
-                        .setCancelable(false)
-                        .setNegativeButton("ОК, иду на кухню",
-                                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-                val alert = builder.create()
-                alert.show()
+            uiThread {
+//                val builder = AlertDialog.Builder(this@MainActivity)
+//                builder.setTitle("Важное сообщение!")
+//                        .setMessage("Покормите кота!")
+//                        .setCancelable(false)
+//                        .setNegativeButton("ОК, иду на кухню",
+//                                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+//                val alert = builder.create()
+//                alert.show()
             }
         }
     }

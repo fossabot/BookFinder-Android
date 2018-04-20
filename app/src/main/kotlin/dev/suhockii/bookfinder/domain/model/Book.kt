@@ -1,6 +1,7 @@
 package dev.suhockii.bookfinder.domain.model
 
 interface Book {
+    val category: String
     val shortName: String
     val fullName: String
     val shortDescription: String

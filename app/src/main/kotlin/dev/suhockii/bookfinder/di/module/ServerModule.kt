@@ -1,32 +1,25 @@
 package dev.suhockii.bookfinder.di.module
 
-import com.google.gson.Gson
+import android.content.Context
+import android.os.Environment
 import dev.suhockii.bookfinder.BuildConfig
-import dev.suhockii.bookfinder.data.remote.GoogleDriveApi
-import dev.suhockii.bookfinder.data.repository.GoogleDriveRepository
 import dev.suhockii.bookfinder.data.repository.StorageRepository
-import dev.suhockii.bookfinder.di.provider.ApiProvider
-import dev.suhockii.bookfinder.di.provider.GsonProvider
-import dev.suhockii.bookfinder.di.provider.OkHttpClientProvider
 import dev.suhockii.bookfinder.di.qualifier.DatabaseFileId
-import dev.suhockii.bookfinder.di.qualifier.GoogleDrivePath
-import dev.suhockii.bookfinder.di.qualifier.LocalRepository
-import dev.suhockii.bookfinder.di.qualifier.RemoteRepository
+import dev.suhockii.bookfinder.di.qualifier.DownloadDirectoryPath
+import dev.suhockii.bookfinder.domain.repository.DatabaseRepository
 import dev.suhockii.bookfinder.domain.repository.FileRepository
-import okhttp3.OkHttpClient
+import dev.suhockii.bookfinder.domain.repository.GoogleDriveRepository
 import toothpick.config.Module
 
-class ServerModule : Module() {
+class ServerModule(context: Context) : Module() {
     init {
         //Network
-        bind(String::class.java).withName(GoogleDrivePath::class.java).toInstance(BuildConfig.GOOGLE_DRIVE_URL)
         bind(String::class.java).withName(DatabaseFileId::class.java).toInstance(BuildConfig.DATABASE_FILE_ID)
-        bind(Gson::class.java).toProvider(GsonProvider::class.java).singletonInScope()
-        bind(GoogleDriveApi::class.java).toProvider(ApiProvider::class.java).singletonInScope()
-        bind(OkHttpClient::class.java).toProvider(OkHttpClientProvider::class.java).providesSingletonInScope()
+        bind(String::class.java).withName(DownloadDirectoryPath::class.java).toInstance(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).path)
 
         //Repository
-        bind(FileRepository::class.java).withName(RemoteRepository::class.java).to(GoogleDriveRepository::class.java)
-        bind(FileRepository::class.java).withName(LocalRepository::class.java).to(StorageRepository::class.java)
+        bind(GoogleDriveRepository::class.java).to(dev.suhockii.bookfinder.data.repository.GoogleDriveRepository::class.java)
+        bind(FileRepository::class.java).to(StorageRepository::class.java)
+        bind(DatabaseRepository::class.java).to(dev.suhockii.bookfinder.data.repository.DatabaseRepository::class.java)
     }
 }

@@ -1,6 +1,7 @@
-package dev.suhockii.bookfinder.data.excel.entity
+package dev.suhockii.bookfinder.data.xls
 
 import dev.suhockii.bookfinder.data.local.entity.BookEntity
+import dev.suhockii.bookfinder.data.xls.entity.XlsDocumentEntity
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
@@ -21,7 +22,10 @@ class XlsParser {
             allMatches.add(matcher.group())
         }
         allMatches.forEachIndexed { index, s ->
-            allMatches[index] = s.removeSurrounding(REGEX_XLS_CDATA_START, REGEX_XLS_CDATA_END)
+            allMatches[index] = s.removeSurrounding(
+                REGEX_XLS_CDATA_START,
+                REGEX_XLS_CDATA_END
+            )
         }
 
         val booksData = mutableMapOf<String, MutableList<BookEntity>>()
@@ -44,6 +48,7 @@ class XlsParser {
             if (objectFieldsQueue.size == OBJECT_FIELD_COUNT) {
                 booksData[currentCategory]!!.add(
                     BookEntity(
+                        currentCategory!!,
                         objectFieldsQueue.pop(),
                         objectFieldsQueue.pop(),
                         objectFieldsQueue.pop(),
@@ -79,7 +84,9 @@ class XlsParser {
     }
 
     private fun convertStreamToString(inputStream: InputStream): String {
-        val reader = BufferedReader(InputStreamReader(inputStream, ENCODING))
+        val reader = BufferedReader(InputStreamReader(inputStream,
+            ENCODING
+        ))
         val stringBuilder = StringBuilder()
         while (reader.readLine()?.let { stringBuilder.append(it).append("\n") } != null) {
         }

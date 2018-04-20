@@ -1,6 +1,6 @@
 android {
     defaultConfig {
-        buildConfigField 'String', 'GOOGLE_DRIVE_URL', "\"$googleDriveUrl\""
+        buildConfigField 'String', 'DATABASE_FILE_NAME', "\"$databaseFileName\""
         buildConfigField 'String', 'DATABASE_FILE_ID', "\"$databaseFileId\""
     }
 }

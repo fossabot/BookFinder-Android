@@ -34,6 +34,6 @@ class App : Application() {
 
         //By default we need init ServerScope for launch app
         val serverScope = Toothpick.openScopes(DI.APP_SCOPE, DI.SERVER_SCOPE)
-        serverScope.installModules(ServerModule())
+        serverScope.installModules(ServerModule(this))
     }
 }

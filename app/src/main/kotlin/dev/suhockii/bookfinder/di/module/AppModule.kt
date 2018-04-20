@@ -1,28 +1,25 @@
 package dev.suhockii.bookfinder.di.module
 
+import android.arch.persistence.room.Room
 import android.content.Context
-import android.os.Environment
-import dev.suhockii.bookfinder.data.excel.entity.XlsParser
-import dev.suhockii.bookfinder.di.qualifier.DownloadDirectoryPath
-import dev.suhockii.bookfinder.util.ResourceManager
-import dev.suhockii.bookfinder.util.flow.FlowRouter
-import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
+import dev.suhockii.bookfinder.BuildConfig
+import dev.suhockii.bookfinder.data.local.BooksDatabase
+import dev.suhockii.bookfinder.data.local.dao.BookDao
+import dev.suhockii.bookfinder.data.local.dao.CategoryDao
+import dev.suhockii.bookfinder.data.remote.GoogleDriveApi
+import dev.suhockii.bookfinder.data.xls.XlsParser
 import toothpick.config.Module
 
 class AppModule(context: Context) : Module() {
     init {
         //Global
         bind(Context::class.java).toInstance(context)
-        bind(ResourceManager::class.java).singletonInScope()
-        bind(String::class.java).withName(DownloadDirectoryPath::class.java).toInstance(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).path)
         bind(XlsParser::class.java).toInstance(XlsParser())
 
-        //Navigation
-        val cicerone = Cicerone.create(FlowRouter())
-        bind(Router::class.java).toInstance(cicerone.router)
-        bind(FlowRouter::class.java).toInstance(cicerone.router)
-        bind(NavigatorHolder::class.java).toInstance(cicerone.navigatorHolder)
+        //Database
+        val database = Room.databaseBuilder(context, BooksDatabase::class.java, BuildConfig.DATABASE_FILE_NAME).build()
+        bind(BookDao::class.java).toInstance(database.booksDao())
+        bind(CategoryDao::class.java).toInstance(database.categoryDao())
+        bind(GoogleDriveApi::class.java).toInstance(GoogleDriveApi())
     }
 }

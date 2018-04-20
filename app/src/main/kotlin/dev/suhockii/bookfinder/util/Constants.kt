@@ -7,7 +7,7 @@ object RequestUrl {
 object HttpHeader {
     const val ID: String = "id"
     const val EXPORT: String = "export"
-    const val CONTENT_DISPOSITION: String = "content-disposition"
+    const val CONTENT_DISPOSITION: String = "Content-Disposition"
 }
 
 object ConstantValue {
