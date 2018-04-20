@@ -20,8 +20,9 @@ class MainActivityPresenter @Inject constructor(
         async {
             val (fileName, data) = fileInteractor.downloadDatabaseFile(fileId).await()
             val zipFile = fileInteractor.saveDatabaseFile(fileName, data).await()
-            val unzippedFile = fileInteractor.unzip(zipFile, zipFile.parentFile).await()
-            info { unzippedFile.length() }
+            val xlsFile = fileInteractor.unzip(zipFile, zipFile.parentFile).await()
+            val document = fileInteractor.parseXlsDocument(xlsFile).await()
+            info { xlsFile.length() }
         }
     }
 }

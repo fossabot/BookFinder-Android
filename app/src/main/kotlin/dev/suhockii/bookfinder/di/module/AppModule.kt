@@ -2,6 +2,7 @@ package dev.suhockii.bookfinder.di.module
 
 import android.content.Context
 import android.os.Environment
+import dev.suhockii.bookfinder.data.excel.entity.XlsParser
 import dev.suhockii.bookfinder.di.qualifier.DownloadDirectoryPath
 import dev.suhockii.bookfinder.util.ResourceManager
 import dev.suhockii.bookfinder.util.flow.FlowRouter
@@ -16,6 +17,7 @@ class AppModule(context: Context) : Module() {
         bind(Context::class.java).toInstance(context)
         bind(ResourceManager::class.java).singletonInScope()
         bind(String::class.java).withName(DownloadDirectoryPath::class.java).toInstance(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).path)
+        bind(XlsParser::class.java).toInstance(XlsParser())
 
         //Navigation
         val cicerone = Cicerone.create(FlowRouter())

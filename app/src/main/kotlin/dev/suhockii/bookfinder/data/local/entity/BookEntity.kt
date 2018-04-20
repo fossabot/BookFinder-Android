@@ -5,7 +5,6 @@ import dev.suhockii.bookfinder.domain.model.Book
 
 @Entity(tableName = "Books", primaryKeys = ["productCode"])
 data class BookEntity(
-    override val productCode: String,
     override val shortName: String,
     override val fullName: String,
     override val shortDescription: String,
@@ -14,5 +13,6 @@ data class BookEntity(
     override val iconLink: String,
     override val productLink: String,
     override val website: String,
-    override val status: Boolean
+    override val productCode: String,
+    override val status: String
 ) : Book

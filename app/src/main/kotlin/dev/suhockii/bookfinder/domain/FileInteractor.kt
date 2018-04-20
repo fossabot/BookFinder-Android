@@ -18,4 +18,7 @@ class FileInteractor @Inject constructor(
 
     fun unzip(fromFile: File, toDirectory: File) =
         localRepository.unzip(fromFile, toDirectory)
+
+    fun parseXlsDocument(xlsFile: File) =
+        localRepository.parseXlsDocument(xlsFile)
 }

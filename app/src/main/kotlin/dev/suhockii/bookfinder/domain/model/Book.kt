@@ -10,5 +10,5 @@ interface Book {
     val productLink: String
     val productCode: String
     val website: String
-    val status: Boolean
+    val status: String
 }

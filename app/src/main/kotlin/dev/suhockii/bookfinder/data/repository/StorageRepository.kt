@@ -1,6 +1,8 @@
 package dev.suhockii.bookfinder.data.repository
 
+import dev.suhockii.bookfinder.data.excel.entity.XlsParser
 import dev.suhockii.bookfinder.di.qualifier.DownloadDirectoryPath
+import dev.suhockii.bookfinder.domain.model.XlsDocument
 import dev.suhockii.bookfinder.domain.repository.FileRepository
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -10,8 +12,21 @@ import javax.inject.Inject
 
 
 class StorageRepository @Inject constructor(
-    @DownloadDirectoryPath private val downloadDirectoryPath: String
+    @DownloadDirectoryPath private val downloadDirectoryPath: String,
+    private val xlsParser: XlsParser
 ) : FileRepository {
+
+    override fun saveFile(fileName: String, data: ByteArray): Deferred<File> =
+        async {
+            val file = File(downloadDirectoryPath, fileName)
+            val bufferedOutputStream: BufferedOutputStream
+            val fileOutputStream = FileOutputStream(file)
+            bufferedOutputStream = BufferedOutputStream(fileOutputStream)
+            bufferedOutputStream.write(data)
+            bufferedOutputStream.flush()
+            bufferedOutputStream.close()
+            file
+        }
 
     override fun unzip(fromFile: File, toDirectory: File): Deferred<File> =
         async {
@@ -29,15 +44,6 @@ class StorageRepository @Inject constructor(
             outputFile
         }
 
-    override fun saveFile(fileName: String, data: ByteArray): Deferred<File> =
-        async {
-            val file = File(downloadDirectoryPath, fileName)
-            val bufferedOutputStream: BufferedOutputStream
-            val fileOutputStream = FileOutputStream(file)
-            bufferedOutputStream = BufferedOutputStream(fileOutputStream)
-            bufferedOutputStream.write(data)
-            bufferedOutputStream.flush()
-            bufferedOutputStream.close()
-            file
-        }
+    override fun parseXlsDocument(xlsFile: File): Deferred<XlsDocument> =
+        async { xlsParser.parseXlsDocument(xlsFile) }
 }
