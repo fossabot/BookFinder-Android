@@ -13,4 +13,7 @@ interface BookDao {
 
     @Query("SELECT * from Books")
     fun getAll(): List<BookEntity>
+
+    @Query("SELECT * FROM Books WHERE category=:category")
+    fun getAllByCategory(category: String): List<BookEntity>
 }

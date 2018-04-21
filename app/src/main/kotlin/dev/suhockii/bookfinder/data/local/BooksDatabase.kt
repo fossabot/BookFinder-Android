@@ -16,5 +16,6 @@ import dev.suhockii.bookfinder.data.local.entity.CategoryEntity
 )
 abstract class BooksDatabase : RoomDatabase() {
     abstract fun booksDao(): BookDao
+
     abstract fun categoryDao(): CategoryDao
 }
