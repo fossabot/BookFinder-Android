@@ -1,25 +1,27 @@
 package dev.suhockii.bookfinder.di.module
 
-import android.arch.persistence.room.Room
 import android.content.Context
-import dev.suhockii.bookfinder.BuildConfig
-import dev.suhockii.bookfinder.data.local.BooksDatabase
-import dev.suhockii.bookfinder.data.local.dao.BookDao
-import dev.suhockii.bookfinder.data.local.dao.CategoryDao
-import dev.suhockii.bookfinder.data.remote.GoogleDriveApi
-import dev.suhockii.bookfinder.data.xls.XlsParser
+import dev.suhockii.bookfinder.di.PrimitiveWrapper
+import dev.suhockii.bookfinder.di.qualifier.DefaultPageSize
+import dev.suhockii.bookfinder.model.system.ResourceManager
+import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
+import ru.terrakok.gitlabclient.model.system.flow.FlowRouter
 import toothpick.config.Module
 
 class AppModule(context: Context) : Module() {
     init {
         //Global
         bind(Context::class.java).toInstance(context)
-        bind(XlsParser::class.java).toInstance(XlsParser())
+        bind(PrimitiveWrapper::class.java).withName(DefaultPageSize::class.java)
+            .toInstance(PrimitiveWrapper(20))
+        bind(ResourceManager::class.java).singletonInScope()
 
-        //Database
-        val database = Room.databaseBuilder(context, BooksDatabase::class.java, BuildConfig.DATABASE_FILE_NAME).build()
-        bind(BookDao::class.java).toInstance(database.booksDao())
-        bind(CategoryDao::class.java).toInstance(database.categoryDao())
-        bind(GoogleDriveApi::class.java).toInstance(GoogleDriveApi())
+        //Navigation
+        val cicerone = Cicerone.create(FlowRouter())
+        bind(Router::class.java).toInstance(cicerone.router)
+        bind(FlowRouter::class.java).toInstance(cicerone.router)
+        bind(NavigatorHolder::class.java).toInstance(cicerone.navigatorHolder)
     }
 }

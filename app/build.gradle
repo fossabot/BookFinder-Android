@@ -8,8 +8,10 @@ apply from: 'build-config.gradle'
 final userName = System.getProperty("user.name")
 final credentialsFolder = getCredentialsFolder(userName)
 
-final releaseKeystoreProperties = getKeystoreProperties(credentialsFolder + "release-keystore.properties")
-final debugKeystoreProperties = getKeystoreProperties(credentialsFolder + "debug-keystore.properties")
+final releaseKeystorePath = credentialsFolder + "release-keystore.properties"
+final releaseKeystoreProperties = getKeystoreProperties(releaseKeystorePath)
+final debugKeystorePath = credentialsFolder + "debug-keystore.properties"
+final debugKeystoreProperties = getKeystoreProperties(debugKeystorePath)
 
 android {
     compileSdkVersion 27
@@ -77,12 +79,7 @@ ext {
     support_library_version = "27.0.2"
     moxy_version = "1.5.3"
     toothpick_version = "1.1.2"
-    room_version = "1.0.0"
-    picasso_version = "2.71828"
-    fuel_version = "1.12.1"
-    junit_version = "4.12"
-    mockito_version = "2.8.9"
-    mockito_kt_version = "1.5.0"
+    retrofit_version = "2.3.0"
 }
 
 dependencies {
@@ -91,20 +88,23 @@ dependencies {
             "com.android.support:appcompat-v7:$support_library_version",
             "com.arello-mobile:moxy-compiler:$moxy_version",
             "com.arello-mobile:moxy-app-compat:$moxy_version",
+            "com.squareup.retrofit2:retrofit:$retrofit_version",
+            "com.squareup.retrofit2:converter-gson:$retrofit_version",
+            "com.squareup.okhttp3:logging-interceptor:3.6.0",
+            "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0",
             "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpick_version",
-            "com.squareup.picasso:picasso:$picasso_version",
-            "com.github.kittinunf.fuel:fuel-android:$fuel_version",
-            "android.arch.persistence.room:runtime:$room_version",
+            "com.google.code.gson:gson:2.8.2",
+            "com.github.bumptech.glide:glide:4.3.1",
+            "ru.terrakok.cicerone:cicerone:3.0.0",
     )
     testImplementation(
-            "junit:junit:$junit_version",
-            "org.mockito:mockito-core:$mockito_version",
-            "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kt_version",
+            "junit:junit:4.12",
+            "org.mockito:mockito-core:2.8.9",
+            "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
     )
     kapt(
             "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version",
             "com.arello-mobile:moxy-compiler:$moxy_version",
-            "android.arch.persistence.room:compiler:$room_version",
     )
 }
 
