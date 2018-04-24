@@ -34,4 +34,10 @@ class InitialInteractor @Inject constructor(
         databaseRepository.saveCategories(data.keys)
         databaseRepository.saveBooks(data.values.flatMap { books -> books }.toList())
     }
+
+    fun getBooksAndCategoriesCount() = doAsyncResult {
+        val categoriesCount = databaseRepository.getCategories().count()
+        val booksCount = databaseRepository.getBooks().count()
+        categoriesCount to booksCount
+    }
 }

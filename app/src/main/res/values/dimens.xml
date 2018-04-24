@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="_8dp">8dp</dimen>
+
+    <dimen name="title">20sp</dimen>
+    <dimen name="button">16sp</dimen>
+</resources>

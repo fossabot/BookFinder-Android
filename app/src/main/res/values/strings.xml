@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Book Finder</string>
-    <string name="database_load_need">To continue, you should download the database file</string>
+    <string name="database_load_need">To continue, you should download \nthe database file.</string>
     <string name="download">Download</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Downloading</string>
+    <string name="parsing">Parsing</string>
+    <string name="saving">Saving</string>
+    <string name="unzipping">Unzipping</string>
     <string name="initialization">Initialization</string>
+    <string name="information">Information</string>
 </resources>

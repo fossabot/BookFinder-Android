@@ -10,14 +10,10 @@ class GoogleDriveRepository @Inject constructor(
 
     override fun getFile(fileId: String): Pair<String, ByteArray> {
         val response = googleDriveApi.getFile(fileId)
-        val contentDispositionHeader = response.headers[CONTENT_DISPOSITION]!!.first()
-        val fileNameRegex = REGEX_FILE_NAME.toRegex()
-        val fileName = fileNameRegex.find(contentDispositionHeader)!!.groups[0]!!.value
-        return fileName to response.data
+        return DOWNLOADED_FILE_NAME to response.data
     }
 
     companion object {
-        const val CONTENT_DISPOSITION: String = "Content-Disposition"
-        const val REGEX_FILE_NAME: String = "(?<=filename=\")(.*\\n?)(?=\")"
+        const val DOWNLOADED_FILE_NAME: String = "downloaded_database"
     }
 }

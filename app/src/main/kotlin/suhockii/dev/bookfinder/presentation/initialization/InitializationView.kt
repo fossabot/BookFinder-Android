@@ -6,4 +6,13 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface InitializationView : MvpView {
+    fun showLoading()
+
+    fun showUnzipping()
+
+    fun showParsing()
+
+    fun showSaving()
+
+    fun showCategoriesAndBooksCount(categoriesCount: Int, booksCount: Int)
 }

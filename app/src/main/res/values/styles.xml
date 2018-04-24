@@ -1,8 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -10,5 +8,9 @@
 
     <style name="AppTheme.SplashTheme">
         <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="Button" parent="Base.CardView">
+        <item name="cardUseCompatPadding">true</item>
     </style>
 </resources>

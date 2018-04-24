@@ -7,6 +7,7 @@ import suhockii.dev.bookfinder.data.repository.DeviceStorageRepository
 import suhockii.dev.bookfinder.data.repository.GoogleDriveRepository
 import suhockii.dev.bookfinder.data.repository.RoomRepository
 import suhockii.dev.bookfinder.data.repository.SharedPreferencesRepository
+import suhockii.dev.bookfinder.data.server.GoogleDriveApi
 import suhockii.dev.bookfinder.di.qualifier.DatabaseFileId
 import suhockii.dev.bookfinder.di.qualifier.DownloadDirectoryPath
 import suhockii.dev.bookfinder.domain.repository.DatabaseRepository
@@ -26,5 +27,6 @@ class ApiModule(context: Context) : Module() {
         bind(FileSystemRepository::class.java).to(DeviceStorageRepository::class.java)
         bind(DatabaseRepository::class.java).to(RoomRepository::class.java)
         bind(SettingsRepository::class.java).to(SharedPreferencesRepository::class.java)
+        bind(GoogleDriveApi::class.java).toInstance(GoogleDriveApi())
     }
 }
