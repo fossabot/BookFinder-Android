@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.splash.SplashActivity"
-            android:theme="@style/AppTheme.SplashTheme">
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.main.MainActivity" />
-        <activity android:name=".presentation.initialization.InitializationActivity" />
+        <activity
+            android:name=".presentation.initial.InitializationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Dialog" />
     </application>
 
 </manifest>

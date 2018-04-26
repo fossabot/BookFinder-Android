@@ -1,11 +1,21 @@
 <resources>
     <string name="app_name">Book Finder</string>
-    <string name="database_load_need">To continue, you should download \nthe database file.</string>
+    <string name="database_load_need">Before using this application, download the book database file.</string>
     <string name="download">Download</string>
+    <string name="stop">Stop</string>
+    <string name="_continue">Continue</string>
+    <string name="retry">Retry</string>
+    <string name="exit">Exit</string>
+    <string name="please_wait">Please wait</string>
     <string name="downloading">Downloading</string>
     <string name="parsing">Parsing</string>
     <string name="saving">Saving</string>
     <string name="unzipping">Unzipping</string>
     <string name="initialization">Initialization</string>
-    <string name="information">Information</string>
+    <string name="info">Info</string>
+    <string name="success">Success!</string>
+    <string name="downloading_statistics">Information about %d books from %d categories was saved successfully.</string>
+    <string name="error_network">Please, check your connection to the Internet.</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error">Error</string>
 </resources>

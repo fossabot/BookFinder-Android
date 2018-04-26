@@ -6,7 +6,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import org.jetbrains.anko.startActivity
 import suhockii.dev.bookfinder.di.DI
-import suhockii.dev.bookfinder.presentation.initialization.InitializationActivity
+import suhockii.dev.bookfinder.presentation.initial.InitializationActivity
 import suhockii.dev.bookfinder.presentation.main.MainActivity
 import toothpick.Toothpick
 

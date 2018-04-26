@@ -6,11 +6,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.SplashTheme">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
     <style name="Button" parent="Base.CardView">
         <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog.MinWidth">
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="ColoredProgressBar" parent="AppTheme">
+        <item name="colorControlActivated">@color/blue</item>
     </style>
 </resources>

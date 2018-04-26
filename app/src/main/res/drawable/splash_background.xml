@@ -5,8 +5,5 @@
 
     <item android:drawable="@android:color/white" />
 
-    <item
-        android:gravity="center"
-        android:drawable="@drawable/app_logo" />
 
 </layer-list>

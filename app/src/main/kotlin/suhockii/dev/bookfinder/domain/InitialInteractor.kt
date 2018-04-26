@@ -6,13 +6,15 @@ import suhockii.dev.bookfinder.domain.model.Book
 import suhockii.dev.bookfinder.domain.repository.DatabaseRepository
 import suhockii.dev.bookfinder.domain.repository.FileSystemRepository
 import suhockii.dev.bookfinder.domain.repository.ServerRepository
+import suhockii.dev.bookfinder.domain.repository.SettingsRepository
 import java.io.File
 import javax.inject.Inject
 
 class InitialInteractor @Inject constructor(
     private val serverRepository: ServerRepository,
     private val fileSystemRepository: FileSystemRepository,
-    private val databaseRepository: DatabaseRepository
+    private val databaseRepository: DatabaseRepository,
+    private val settingsRepository: SettingsRepository
 ) {
     fun downloadDatabaseFile(fileId: String) = doAsyncResult {
         serverRepository.getFile(fileId)
@@ -39,5 +41,9 @@ class InitialInteractor @Inject constructor(
         val categoriesCount = databaseRepository.getCategories().count()
         val booksCount = databaseRepository.getBooks().count()
         categoriesCount to booksCount
+    }
+
+    fun setDatabaseIsLoaded() {
+        settingsRepository.isDatabaseLoaded = true
     }
 }

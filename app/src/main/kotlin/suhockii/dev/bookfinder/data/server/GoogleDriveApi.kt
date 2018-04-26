@@ -1,7 +1,6 @@
 package suhockii.dev.bookfinder.data.server
 
 import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
 
 class GoogleDriveApi {
@@ -9,13 +8,12 @@ class GoogleDriveApi {
         FuelManager.instance.basePath = URL_GOOGLE_DRIVE
     }
 
-    fun getFile(fileId: String): Response =
-        URL_USER_CONTEXT.httpGet(
-            listOf(
-                HEADER_ID to fileId,
-                HEADER_EXPORT to VALUE_DOWNLOAD
-            )
-        ).response().second
+    fun getFile(fileId: String): ByteArray {
+        val parameters = listOf(HEADER_ID to fileId, HEADER_EXPORT to VALUE_DOWNLOAD)
+        val (byteArray, error) = URL_USER_CONTEXT.httpGet(parameters).response().third
+        error?.let { throw it.exception }
+        return byteArray!!
+    }
 
     companion object {
         const val URL_USER_CONTEXT: String = "/uc"
