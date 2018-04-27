@@ -1,13 +1,13 @@
 package suhockii.dev.bookfinder.data
 
-import com.github.kittinunf.fuel.core.HttpException
-import org.jetbrains.anko.AnkoLogger
+import retrofit2.HttpException
 import java.net.UnknownHostException
 
-class ErrorHandler : AnkoLogger {
+class ErrorHandler {
     var subscribe: ((ErrorType) -> Unit)? = null
 
     val errorReceiver: (Throwable) -> Unit = {
+        it.printStackTrace()
         if (it !is InterruptedException) {
             subscribe?.invoke(
                 when (it.cause) {

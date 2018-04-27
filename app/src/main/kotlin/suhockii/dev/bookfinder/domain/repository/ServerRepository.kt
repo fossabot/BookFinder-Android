@@ -1,5 +1,5 @@
 package suhockii.dev.bookfinder.domain.repository
 
 interface ServerRepository {
-    fun getFile(fileId: String): Pair<String, ByteArray>
+    fun getFile(fileUrl: String): ByteArray
 }

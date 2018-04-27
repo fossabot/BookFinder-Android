@@ -79,7 +79,7 @@ ext {
     toothpick_version = "1.1.2"
     room_version = "1.0.0"
     picasso_version = "2.71828"
-    fuel_version = "1.12.1"
+    retrofit_version = "2.4.0"
     junit_version = "4.12"
     mockito_version = "2.8.9"
     mockito_kt_version = "1.5.0"
@@ -96,7 +96,7 @@ dependencies {
             "com.arello-mobile:moxy-app-compat:$moxy_version",
             "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpick_version",
             "com.squareup.picasso:picasso:$picasso_version",
-            "com.github.kittinunf.fuel:fuel-android:$fuel_version",
+            "com.squareup.retrofit2:retrofit:$retrofit_version",
             "android.arch.persistence.room:runtime:$room_version",
     )
     testImplementation(
