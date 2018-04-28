@@ -8,6 +8,8 @@ class GoogleDriveRepository @Inject constructor(
     private val googleDriveApi: GoogleDriveApi
 ) : ServerRepository {
 
-    override fun getFile(fileUrl: String): ByteArray =
-        googleDriveApi.getFile(fileUrl).execute().body()!!.bytes()
+    override fun getFile(fileUrl: String): ByteArray {
+        val response = googleDriveApi.getFile(fileUrl).execute()
+        return response.body()!!.bytes()
+    }
 }

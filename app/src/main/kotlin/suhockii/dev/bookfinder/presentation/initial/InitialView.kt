@@ -22,4 +22,6 @@ interface InitialView : MvpView {
     fun showInitialViewState()
 
     fun showError(@StringRes errorDescriptionRes: Int)
+
+    fun update(downloadedPercent: Int, done: Boolean)
 }

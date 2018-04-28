@@ -16,6 +16,8 @@
     <string name="success">Success!</string>
     <string name="downloading_statistics">Information about %d books from %d categories was saved successfully.</string>
     <string name="error_network">Please, check your connection to the Internet.</string>
-    <string name="error_unknown">Unknown error</string>
+    <string name="error_unknown">Unknown error.</string>
+    <string name="out_of_memory">Out of memory.</string>
     <string name="error">Error</string>
+    <string name="percent" translatable="false">%d%%</string>
 </resources>

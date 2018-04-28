@@ -5,6 +5,7 @@ import android.os.Environment
 import okhttp3.OkHttpClient
 import suhockii.dev.bookfinder.BuildConfig
 import suhockii.dev.bookfinder.data.api.GoogleDriveApi
+import suhockii.dev.bookfinder.data.api.interceptor.ProgressEmitter
 import suhockii.dev.bookfinder.data.repository.DeviceStorageRepository
 import suhockii.dev.bookfinder.data.repository.GoogleDriveRepository
 import suhockii.dev.bookfinder.data.repository.RoomRepository
@@ -28,6 +29,7 @@ class ApiModule(context: Context) : Module() {
         bind(String::class.java).withName(DatabaseFileUrl::class.java).toInstance(BuildConfig.DATABASE_FILE_URL)
         bind(OkHttpClient::class.java).toProvider(OkHttpClientProvider::class.java).providesSingletonInScope()
         bind(GoogleDriveApi::class.java).toProvider(ApiProvider::class.java).providesSingletonInScope()
+        bind(ProgressEmitter::class.java).toInstance(ProgressEmitter())
 
         //Repository
         bind(ServerRepository::class.java).to(GoogleDriveRepository::class.java)

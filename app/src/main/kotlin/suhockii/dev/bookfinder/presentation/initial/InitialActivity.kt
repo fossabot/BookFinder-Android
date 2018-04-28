@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 
-class InitializationActivity : MvpAppCompatActivity(), InitialView {
+class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
 
     init {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -33,9 +33,10 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView {
     private lateinit var dotsTimer: Timer
 
     @ProvidePresenter
-    fun providePresenter(): InitialPresenter =
-        Toothpick.openScope(DI.API_SCOPE)
-            .getInstance(InitialPresenter::class.java)
+    fun providePresenter(): InitialPresenter {
+        val scope = Toothpick.openScope(DI.API_SCOPE)
+        return scope.getInstance(InitialPresenter::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +53,17 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView {
         if (isFinishing) Toothpick.closeScope(DI.MAIN_ACTIVITY_SCOPE)
     }
 
+    override fun update(downloadedPercent: Int, done: Boolean) {
+        if (done) layout.textProgress.visibility = View.GONE
+        else layout.textProgress.text = getString(R.string.percent, downloadedPercent)
+    }
+
     override fun showLoading() = with(layout) {
+        textProgress.visibility = View.VISIBLE
+        textProgress.text = getString(R.string.percent, 0)
         textTitle.textResource = R.string.please_wait
         textDescription.textResource = R.string.downloading
-        progress.visibility = View.VISIBLE
+        progressViewGroup.visibility = View.VISIBLE
         btnStop.visibility = View.VISIBLE
         btnExit.visibility = View.GONE
         btnDownload.visibility = View.GONE
@@ -76,8 +84,8 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView {
     }
 
     override fun showSuccess(categoriesCount: Int, booksCount: Int) = with(layout) {
-        dotsTimer.cancel()
-        progress.visibility = View.GONE
+        cancelDotsAnimation()
+        progressViewGroup.visibility = View.GONE
         textDescription.text =
                 getString(R.string.downloading_statistics, booksCount, categoriesCount)
         textTitle.textResource = R.string.success
@@ -93,24 +101,30 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView {
     }
 
     override fun showInitialViewState() = with(layout) {
-        dotsTimer.cancel()
+        cancelDotsAnimation()
         btnDownload.visibility = View.VISIBLE
         btnExit.visibility = View.VISIBLE
-        progress.visibility = View.GONE
+        progressViewGroup.visibility = View.GONE
         btnStop.visibility = View.GONE
         textTitle.text = getString(R.string.info)
         textDescription.textResource = R.string.database_load_need
     }
 
     override fun showError(errorDescriptionRes: Int) = with(layout) {
-        dotsTimer.cancel()
+        cancelDotsAnimation()
         textTitle.textResource = R.string.error
         textDescription.textResource = errorDescriptionRes
         btnRetry.visibility = View.VISIBLE
         btnStop.visibility = View.GONE
         btnExit.visibility = View.VISIBLE
         btnDownload.visibility = View.GONE
-        progress.visibility = View.GONE
+        progressViewGroup.visibility = View.GONE
+    }
+
+    private fun cancelDotsAnimation() {
+        dotsTimer.cancel()
+        val previousText = layout.textDescription.text.replace("\\.+".toRegex(), "")
+        layout.textDescription.text = previousText
     }
 
     private fun startDotsAnimation() {
@@ -135,7 +149,8 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView {
 class InitializationActivityLayout : AnkoComponent<InitializationActivity> {
     internal lateinit var textTitle: TextView
     internal lateinit var textDescription: TextView
-    internal lateinit var progress: View
+    internal lateinit var textProgress: TextView
+    internal lateinit var progressViewGroup: View
     internal lateinit var btnExit: View
     internal lateinit var btnDownload: View
     internal lateinit var btnStop: View
@@ -166,9 +181,20 @@ class InitializationActivityLayout : AnkoComponent<InitializationActivity> {
             }
 
             linearLayout {
-                themedProgressBar(R.style.ColoredProgressBar) {
-                    this@InitializationActivityLayout.progress = this
+                frameLayout {
+                    progressViewGroup = this
                     visibility = View.GONE
+
+                    themedProgressBar(R.style.ColoredProgressBar) {
+                    }.lparams {
+                        gravity = Gravity.CENTER
+                    }
+
+                    textView("0%") {
+                        textProgress = this
+                    }.lparams {
+                        gravity = Gravity.CENTER
+                    }
                 }.lparams {
                     gravity = Gravity.CENTER_VERTICAL
                     leftMargin = dip(22)

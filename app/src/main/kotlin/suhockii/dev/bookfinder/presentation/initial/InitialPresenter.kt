@@ -8,6 +8,7 @@ import org.jetbrains.anko.uiThread
 import suhockii.dev.bookfinder.R
 import suhockii.dev.bookfinder.data.ErrorHandler
 import suhockii.dev.bookfinder.data.ErrorType
+import suhockii.dev.bookfinder.data.api.interceptor.ProgressEmitter
 import suhockii.dev.bookfinder.domain.InitialInteractor
 import java.util.concurrent.Future
 import javax.inject.Inject
@@ -15,17 +16,22 @@ import javax.inject.Inject
 @InjectViewState
 class InitialPresenter @Inject constructor(
     private val initialInteractor: InitialInteractor,
+    progressEmitter: ProgressEmitter,
     private val errorHandler: ErrorHandler
 ) : MvpPresenter<InitialView>(), AnkoLogger {
 
     init {
-        errorHandler.subscribe = {
+        errorHandler.subscriber = {
             val errorDescriptionRes = when (it) {
                 ErrorType.NETWORK -> R.string.error_network
-
+                ErrorType.OUT_OF_MEMORY -> R.string.error_unknown
                 ErrorType.UNKNOWN -> R.string.error_unknown
             }
             doAsync { uiThread { viewState.showError(errorDescriptionRes) } }
+        }
+
+        progressEmitter.subscriber = { progress, done ->
+            doAsync { uiThread { viewState.update(progress, done) } }
         }
     }
 

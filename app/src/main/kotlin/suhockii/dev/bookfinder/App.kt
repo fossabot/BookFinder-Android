@@ -2,8 +2,8 @@ package suhockii.dev.bookfinder
 
 import android.app.Application
 import suhockii.dev.bookfinder.di.DI
-import suhockii.dev.bookfinder.di.module.AppModule
 import suhockii.dev.bookfinder.di.module.ApiModule
+import suhockii.dev.bookfinder.di.module.AppModule
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
 import toothpick.registries.FactoryRegistryLocator
@@ -32,8 +32,7 @@ class App : Application() {
         val appScope = Toothpick.openScope(DI.APP_SCOPE)
         appScope.installModules(AppModule(this))
 
-        //By default we need init ServerScope for launch app
-        val serverScope = Toothpick.openScopes(DI.APP_SCOPE, DI.API_SCOPE)
-        serverScope.installModules(ApiModule(this))
+        val apiScope = Toothpick.openScopes(DI.APP_SCOPE, DI.API_SCOPE)
+        apiScope.installModules(ApiModule(this))
     }
 }
