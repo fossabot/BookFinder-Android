@@ -1,17 +1,16 @@
 package suhockii.dev.bookfinder.presentation.initial
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
-import android.view.Gravity
 import android.view.View
 import android.view.Window
-import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import org.jetbrains.anko.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textResource
 import suhockii.dev.bookfinder.R
 import suhockii.dev.bookfinder.di.DI
 import suhockii.dev.bookfinder.presentation.main.MainActivity
@@ -29,7 +28,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     @InjectPresenter
     lateinit var presenter: InitialPresenter
 
-    private lateinit var layout: InitializationActivityLayout
+    private lateinit var layout: InitialActivityLayout
     private lateinit var dotsTimer: Timer
 
     @ProvidePresenter
@@ -44,7 +43,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
             Toothpick.inject(this@InitializationActivity, this)
         }
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        layout = InitializationActivityLayout()
+        layout = InitialActivityLayout()
         layout.setContentView(this)
     }
 
@@ -129,154 +128,25 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
 
     private fun startDotsAnimation() {
         var dotCount = 0
-        dotsTimer = fixedRateTimer(period = 350) {
+        dotsTimer = fixedRateTimer(period = DOTS_ANIMATION_DELAY) {
             dotCount++
             if (dotCount == 4) dotCount = 0
-            val downloadingText = when (dotCount) {
-                0 -> ""
-                1 -> "."
-                2 -> ".."
-                else -> "..."
+            val dots = when (dotCount) {
+                1 -> STRING_1_DOT
+                2 -> STRING_2_DOT
+                3 -> STRING_3_DOT
+                else -> STRING_EMPTY
             }
-            runOnUiThread {
-                val previousText = layout.textDescription.text.replace("\\.+".toRegex(), "")
-                layout.textDescription.text = previousText.plus(downloadingText)
-            }
+            val previousText = layout.textDescription.text.replace("\\.+".toRegex(), "")
+            runOnUiThread { layout.textDescription.text = previousText.plus(dots) }
         }
     }
-}
 
-class InitializationActivityLayout : AnkoComponent<InitializationActivity> {
-    internal lateinit var textTitle: TextView
-    internal lateinit var textDescription: TextView
-    internal lateinit var textProgress: TextView
-    internal lateinit var progressViewGroup: View
-    internal lateinit var btnExit: View
-    internal lateinit var btnDownload: View
-    internal lateinit var btnStop: View
-    internal lateinit var btnContinue: View
-    internal lateinit var btnRetry: View
-
-    override fun createView(ui: AnkoContext<InitializationActivity>) = with(ui) {
-
-        verticalLayout {
-            frameLayout {
-                backgroundResource = R.color.blue
-
-                imageView(R.drawable.ic_info).lparams {
-                    gravity = Gravity.CENTER
-                    margin = dip(28)
-                }
-            }.lparams(matchParent, wrapContent)
-
-            textView(R.string.info) {
-                textTitle = this
-                textSizeDimen = R.dimen.title
-                gravity = Gravity.CENTER
-                typeface = Typeface.DEFAULT_BOLD
-            }.lparams {
-                topMargin = dip(24)
-                leftMargin = dip(24)
-                rightMargin = dip(24)
-            }
-
-            linearLayout {
-                frameLayout {
-                    progressViewGroup = this
-                    visibility = View.GONE
-
-                    themedProgressBar(R.style.ColoredProgressBar) {
-                    }.lparams {
-                        gravity = Gravity.CENTER
-                    }
-
-                    textView("0%") {
-                        textProgress = this
-                    }.lparams {
-                        gravity = Gravity.CENTER
-                    }
-                }.lparams {
-                    gravity = Gravity.CENTER_VERTICAL
-                    leftMargin = dip(22)
-                }
-
-                textView(resources.getString(R.string.database_load_need)) {
-                    textDescription = this
-                    setPadding(0, dip(6), 0, dip(6))
-                    textSizeDimen = R.dimen.description
-                }.lparams {
-                    leftMargin = dip(24)
-                    gravity = Gravity.CENTER_VERTICAL
-                }
-            }.lparams(matchParent, dip(64)) {
-                topMargin = dip(16)
-                rightMargin = dip(24)
-            }
-
-            frameLayout {
-                backgroundResource = R.color.gray
-            }.lparams(matchParent, dip(1)) {
-                topMargin = dip(20)
-                leftMargin = dip(16)
-                rightMargin = dip(16)
-            }
-
-            linearLayout {
-                textView(R.string.exit) {
-                    btnExit = this
-                    allCaps = true
-                    textColorResource = R.color.blue
-                    padding = dip(8)
-                    onClick { owner.finish() }
-                }.lparams {
-                    margin = dip(8)
-                }
-
-                textView(R.string.download) {
-                    btnDownload = this
-                    allCaps = true
-                    textColorResource = R.color.blue
-                    padding = dip(8)
-                    onClick { owner.presenter.loadDatabase() }
-                }.lparams {
-                    margin = dip(8)
-                }
-
-                textView(R.string.stop) {
-                    btnStop = this
-                    visibility = View.GONE
-                    allCaps = true
-                    textColorResource = R.color.blue
-                    padding = dip(8)
-                    onClick { owner.presenter.stopDownloading() }
-                }.lparams {
-                    margin = dip(8)
-                }
-
-                textView(R.string._continue) {
-                    btnContinue = this
-                    visibility = View.GONE
-                    allCaps = true
-                    textColorResource = R.color.blue
-                    padding = dip(8)
-                    onClick { owner.presenter.flowFinished() }
-                }.lparams {
-                    margin = dip(8)
-                }
-
-                textView(R.string.retry) {
-                    btnRetry = this
-                    visibility = View.GONE
-                    allCaps = true
-                    textColorResource = R.color.blue
-                    padding = dip(8)
-                    onClick { owner.presenter.loadDatabase() }
-                }.lparams {
-                    margin = dip(8)
-                }
-            }.lparams(wrapContent, dip(52)) {
-                gravity = Gravity.END
-            }
-        }
+    companion object {
+        private const val DOTS_ANIMATION_DELAY = 350L
+        private const val STRING_EMPTY = ""
+        private const val STRING_1_DOT = "."
+        private const val STRING_2_DOT = ".."
+        private const val STRING_3_DOT = "..."
     }
 }

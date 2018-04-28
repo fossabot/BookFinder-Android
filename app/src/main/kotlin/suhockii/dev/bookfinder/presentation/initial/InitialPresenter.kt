@@ -24,7 +24,9 @@ class InitialPresenter @Inject constructor(
         errorHandler.subscriber = {
             val errorDescriptionRes = when (it) {
                 ErrorType.NETWORK -> R.string.error_network
+
                 ErrorType.OUT_OF_MEMORY -> R.string.error_unknown
+
                 ErrorType.UNKNOWN -> R.string.error_unknown
             }
             doAsync { uiThread { viewState.showError(errorDescriptionRes) } }
