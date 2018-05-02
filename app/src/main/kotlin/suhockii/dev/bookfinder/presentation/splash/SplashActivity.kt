@@ -7,7 +7,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import org.jetbrains.anko.startActivity
 import suhockii.dev.bookfinder.di.DI
 import suhockii.dev.bookfinder.presentation.initial.InitializationActivity
-import suhockii.dev.bookfinder.presentation.main.MainActivity
+import suhockii.dev.bookfinder.presentation.categories.CategoriesActivity
 import toothpick.Toothpick
 
 
@@ -18,12 +18,12 @@ class SplashActivity : MvpAppCompatActivity(), SplashView {
 
     @ProvidePresenter
     fun providePresenter(): SplashPresenter =
-        Toothpick.openScope(DI.API_SCOPE)
+        Toothpick.openScope(DI.APP_SCOPE)
             .getInstance(SplashPresenter::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Toothpick.openScopes(DI.API_SCOPE, DI.SPLASH_ACTIVITY_SCOPE).apply {
+        Toothpick.openScopes(DI.APP_SCOPE, DI.SPLASH_ACTIVITY_SCOPE).apply {
             Toothpick.inject(this@SplashActivity, this)
         }
         presenter.checkIfDatabaseLoaded()
@@ -35,7 +35,7 @@ class SplashActivity : MvpAppCompatActivity(), SplashView {
     }
 
     override fun showMainScreen() {
-        startActivity<MainActivity>()
+        startActivity<CategoriesActivity>()
         finish()
     }
 

@@ -1,4 +1,4 @@
-package suhockii.dev.bookfinder.di.provider
+package suhockii.dev.bookfinder.di.provider.storage
 
 import suhockii.dev.bookfinder.data.database.BooksDatabase
 import suhockii.dev.bookfinder.data.database.dao.BookDao

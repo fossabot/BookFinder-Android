@@ -1,7 +1,7 @@
 package suhockii.dev.bookfinder.data.repository
 
 import suhockii.dev.bookfinder.data.parser.XlsParser
-import suhockii.dev.bookfinder.di.qualifier.DownloadDirectoryPath
+import suhockii.dev.bookfinder.di.DownloadDirectoryPath
 import suhockii.dev.bookfinder.domain.model.XlsDocument
 import suhockii.dev.bookfinder.domain.repository.FileSystemRepository
 import java.io.*

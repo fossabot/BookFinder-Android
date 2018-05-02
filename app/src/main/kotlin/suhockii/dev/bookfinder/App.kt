@@ -2,7 +2,6 @@ package suhockii.dev.bookfinder
 
 import android.app.Application
 import suhockii.dev.bookfinder.di.DI
-import suhockii.dev.bookfinder.di.module.ApiModule
 import suhockii.dev.bookfinder.di.module.AppModule
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
@@ -31,8 +30,5 @@ class App : Application() {
     private fun initAppScope() {
         val appScope = Toothpick.openScope(DI.APP_SCOPE)
         appScope.installModules(AppModule(this))
-
-        val apiScope = Toothpick.openScopes(DI.APP_SCOPE, DI.API_SCOPE)
-        apiScope.installModules(ApiModule(this))
     }
 }

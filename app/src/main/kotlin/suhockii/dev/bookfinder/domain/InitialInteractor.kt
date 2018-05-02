@@ -2,8 +2,8 @@ package suhockii.dev.bookfinder.domain
 
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.doAsyncResult
-import suhockii.dev.bookfinder.di.qualifier.DatabaseFileUrl
-import suhockii.dev.bookfinder.di.qualifier.DownloadedFileName
+import suhockii.dev.bookfinder.di.DatabaseFileUrl
+import suhockii.dev.bookfinder.di.DownloadedFileName
 import suhockii.dev.bookfinder.domain.model.Book
 import suhockii.dev.bookfinder.domain.repository.DatabaseRepository
 import suhockii.dev.bookfinder.domain.repository.FileSystemRepository

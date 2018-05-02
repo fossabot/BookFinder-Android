@@ -18,6 +18,9 @@
     <string name="error_network">Please, check your connection to the Internet.</string>
     <string name="error_unknown">Unknown error.</string>
     <string name="out_of_memory">Out of memory.</string>
+    <string name="corrupted_file">Unfortunately, downloaded file is corrupted. Please, tell the developers about this issue.</string>
     <string name="error">Error</string>
+    <string name="categories">Categories</string>
+
     <string name="percent" translatable="false">%d%%</string>
 </resources>

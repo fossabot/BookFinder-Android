@@ -1,4 +1,4 @@
-package suhockii.dev.bookfinder.data.api.interceptor
+package suhockii.dev.bookfinder.data.network.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response

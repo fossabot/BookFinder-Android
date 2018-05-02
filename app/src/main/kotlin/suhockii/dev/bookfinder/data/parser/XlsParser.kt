@@ -1,5 +1,6 @@
 package suhockii.dev.bookfinder.data.parser
 
+import org.jetbrains.anko.AnkoLogger
 import suhockii.dev.bookfinder.data.database.entity.BookEntity
 import suhockii.dev.bookfinder.data.parser.entity.XlsDocumentEntity
 import java.io.BufferedReader
@@ -8,24 +9,20 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 import java.util.regex.Pattern
+import javax.inject.Inject
 
 
-class XlsParser {
+class XlsParser @Inject constructor() : AnkoLogger {
 
     fun parseXlsDocument(xlsFile: File): XlsDocumentEntity {
         val contentString = getStringFromFile(xlsFile)
         val allMatches = ArrayList<String>()
-        val matcher = Pattern
-            .compile(REGEX_XLS_DATA)
-            .matcher(contentString)
+        val matcher = Pattern.compile(REGEX_XLS_DATA).matcher(contentString)
+
         while (matcher.find()) {
-            allMatches.add(matcher.group())
-        }
-        allMatches.forEachIndexed { index, s ->
-            allMatches[index] = s.removeSurrounding(
-                REGEX_XLS_CDATA_START,
-                REGEX_XLS_CDATA_END
-            )
+            matcher.group().let {
+                allMatches.add(it.removeSurrounding(REGEX_XLS_CDATA_START, REGEX_XLS_CDATA_END))
+            }
         }
 
         val booksData = mutableMapOf<String, MutableList<BookEntity>>()
@@ -44,27 +41,28 @@ class XlsParser {
                 continue
             }
 
-            objectFieldsQueue.add(allMatches[index])
-            if (objectFieldsQueue.size == OBJECT_FIELD_COUNT) {
-                booksData[currentCategory]!!.add(
-                    BookEntity(
-                        currentCategory!!,
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop().toDouble(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop(),
-                        objectFieldsQueue.pop()
+            with(objectFieldsQueue) {
+                add(allMatches[index])
+                if (size == OBJECT_FIELD_COUNT) {
+                    booksData[currentCategory]!!.add(
+                        BookEntity(
+                            category = currentCategory!!,
+                            shortName = pop(),
+                            fullName = pop(),
+                            shortDescription = pop(),
+                            fullDescription = pop(),
+                            price = pop().toDouble(),
+                            iconLink = pop(),
+                            productLink = pop(),
+                            website = pop(),
+                            productCode = pop(),
+                            status = pop()
+                        )
                     )
-                )
+                }
             }
         }
 
-        booksData.size
         return XlsDocumentEntity(
             title = allMatches[POSITION_TITLE],
             creationDate = allMatches[POSITION_CREATION_DATE],
@@ -84,9 +82,12 @@ class XlsParser {
     }
 
     private fun convertStreamToString(inputStream: InputStream): String {
-        val reader = BufferedReader(InputStreamReader(inputStream,
-            ENCODING
-        ))
+        val reader = BufferedReader(
+            InputStreamReader(
+                inputStream,
+                ENCODING
+            )
+        )
         val stringBuilder = StringBuilder()
         while (reader.readLine()?.let { stringBuilder.append(it).append("\n") } != null) {
         }

@@ -1,8 +1,8 @@
-package suhockii.dev.bookfinder.di.provider
+package suhockii.dev.bookfinder.di.provider.storage
 
 import android.content.Context
 import android.content.SharedPreferences
-import suhockii.dev.bookfinder.di.qualifier.SharedPreferencesFileName
+import suhockii.dev.bookfinder.di.SharedPreferencesFileName
 import javax.inject.Inject
 import javax.inject.Provider
 

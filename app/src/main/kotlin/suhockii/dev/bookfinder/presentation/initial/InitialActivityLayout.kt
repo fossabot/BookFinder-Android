@@ -8,8 +8,9 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import suhockii.dev.bookfinder.R
 import suhockii.dev.bookfinder.resolveAttrResource
+import javax.inject.Inject
 
-class InitialActivityLayout : AnkoComponent<InitializationActivity> {
+class InitialActivityLayout @Inject constructor() : AnkoComponent<InitializationActivity> {
     internal lateinit var textTitle: TextView
     internal lateinit var textDescription: TextView
     internal lateinit var textProgress: TextView
@@ -115,7 +116,8 @@ class InitialActivityLayout : AnkoComponent<InitializationActivity> {
             }.applyRecursively { view ->
                 when (view) {
                     is TextView -> with(view) {
-                        backgroundResource = context.resolveAttrResource(R.attr.selectableItemBackground)
+                        backgroundResource =
+                                context.resolveAttrResource(R.attr.selectableItemBackground)
                         textSize = 14F
                         allCaps = true
                         textColorResource = R.color.blue

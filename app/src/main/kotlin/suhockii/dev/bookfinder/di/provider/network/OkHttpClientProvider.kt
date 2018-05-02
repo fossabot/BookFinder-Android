@@ -1,7 +1,7 @@
-package suhockii.dev.bookfinder.di.provider
+package suhockii.dev.bookfinder.di.provider.network
 
 import okhttp3.OkHttpClient
-import suhockii.dev.bookfinder.data.api.interceptor.ProgressInterceptor
+import suhockii.dev.bookfinder.data.network.interceptor.ProgressInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Provider

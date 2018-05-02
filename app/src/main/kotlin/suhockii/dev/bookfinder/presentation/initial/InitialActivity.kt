@@ -13,9 +13,11 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.textResource
 import suhockii.dev.bookfinder.R
 import suhockii.dev.bookfinder.di.DI
-import suhockii.dev.bookfinder.presentation.main.MainActivity
+import suhockii.dev.bookfinder.di.module.InitialActivityModule
+import suhockii.dev.bookfinder.presentation.categories.CategoriesActivity
 import toothpick.Toothpick
 import java.util.*
+import javax.inject.Inject
 import kotlin.concurrent.fixedRateTimer
 
 
@@ -28,33 +30,37 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     @InjectPresenter
     lateinit var presenter: InitialPresenter
 
-    private lateinit var layout: InitialActivityLayout
+    @Inject
+    lateinit var layout: InitialActivityLayout
+
     private lateinit var dotsTimer: Timer
 
     @ProvidePresenter
-    fun providePresenter(): InitialPresenter {
-        val scope = Toothpick.openScope(DI.API_SCOPE)
-        return scope.getInstance(InitialPresenter::class.java)
-    }
+    fun providePresenter(): InitialPresenter =
+        Toothpick.openScope(DI.APP_SCOPE)
+            .apply { installModules(InitialActivityModule(this@InitializationActivity)) }
+            .getInstance(InitialPresenter::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Toothpick.openScopes(DI.API_SCOPE, DI.INITIALIZATION_ACTIVITY_SCOPE).apply {
+        Toothpick.openScopes(DI.APP_SCOPE, DI.INITIALIZATION_ACTIVITY_SCOPE).apply {
             Toothpick.inject(this@InitializationActivity, this)
         }
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        layout = InitialActivityLayout()
         layout.setContentView(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isFinishing) Toothpick.closeScope(DI.MAIN_ACTIVITY_SCOPE)
+        if (isFinishing) Toothpick.closeScope(DI.INITIALIZATION_ACTIVITY_SCOPE)
     }
 
     override fun update(downloadedPercent: Int, done: Boolean) {
         if (done) layout.textProgress.visibility = View.GONE
-        else layout.textProgress.text = getString(R.string.percent, downloadedPercent)
+        else layout.textProgress.apply {
+            text = getString(R.string.percent, downloadedPercent)
+            visibility = View.VISIBLE
+        }
     }
 
     override fun showLoading() = with(layout) {
@@ -85,8 +91,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     override fun showSuccess(categoriesCount: Int, booksCount: Int) = with(layout) {
         cancelDotsAnimation()
         progressViewGroup.visibility = View.GONE
-        textDescription.text =
-                getString(R.string.downloading_statistics, booksCount, categoriesCount)
+        textDescription.text = getString(R.string.downloading_statistics, booksCount, categoriesCount)
         textTitle.textResource = R.string.success
         btnStop.visibility = View.GONE
         btnExit.visibility = View.GONE
@@ -95,7 +100,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     }
 
     override fun showMainScreen() {
-        startActivity<MainActivity>()
+        startActivity<CategoriesActivity>()
         finish()
     }
 
@@ -130,7 +135,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         var dotCount = 0
         dotsTimer = fixedRateTimer(period = DOTS_ANIMATION_DELAY) {
             dotCount++
-            if (dotCount == 4) dotCount = 0
+            if (dotCount > MAX_DOTS_COUNT) dotCount = 0
             val dots = when (dotCount) {
                 1 -> STRING_1_DOT
                 2 -> STRING_2_DOT
@@ -144,6 +149,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
 
     companion object {
         private const val DOTS_ANIMATION_DELAY = 350L
+        private const val MAX_DOTS_COUNT = 3
         private const val STRING_EMPTY = ""
         private const val STRING_1_DOT = "."
         private const val STRING_2_DOT = ".."
