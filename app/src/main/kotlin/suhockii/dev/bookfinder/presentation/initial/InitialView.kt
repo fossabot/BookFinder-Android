@@ -7,6 +7,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(OneExecutionStateStrategy::class)
 interface InitialView : MvpView {
+    fun showStepNumber(stepNumer: Int)
+
     fun showLoading()
 
     fun showUnzipping()
@@ -15,7 +17,7 @@ interface InitialView : MvpView {
 
     fun showSaving()
 
-    fun showSuccess(categoriesCount: Int, booksCount: Int)
+    fun showSuccess(statistics: Pair<Int, Int>)
 
     fun showMainScreen()
 

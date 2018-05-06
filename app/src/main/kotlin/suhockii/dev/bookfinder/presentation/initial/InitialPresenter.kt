@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class InitialPresenter @Inject constructor(
-    private val initialInteractor: InitialInteractor,
+    private val interactor: InitialInteractor,
     private val progressEmitter: ProgressEmitter,
     private val errorHandler: ErrorHandler
 ) : MvpPresenter<InitialView>(), AnkoLogger {
@@ -37,36 +37,43 @@ class InitialPresenter @Inject constructor(
         }
     }
 
-    fun loadDatabase() = with(initialInteractor) {
-        doAsync(errorHandler.errorReceiver) {
-            uiThread { viewState.showLoading() }
-            progressEmitter.subscriber = { progress, done -> onDownloadingProgress(progress, done) }
-            val bytes = downloadDatabaseFile().get()
-            val zipFile = saveDatabaseFile(bytes).get()
-            uiThread { viewState.showUnzipping() }
-            val xlsFile = unzip(zipFile, zipFile.parentFile).get()
-            uiThread { viewState.showParsing() }
-            val document = parseXlsDocument(xlsFile).get()
-            uiThread { viewState.showSaving() }
-            saveDocumentData(document.data).get()
-            val (categoriesCount, booksCount) = getBooksAndCategoriesCount().get()
-            uiThread { viewState.showSuccess(categoriesCount, booksCount) }
-        }.apply { loadDatabaseTask = this }
+    override fun destroyView(view: InitialView?) {
+        super.destroyView(view)
+        progressEmitter.subscriber = null
     }
 
-    private fun onDownloadingProgress(progress: Int, done: Boolean) {
-        doAsync {
+    fun loadDatabase() =
+        doAsync(errorHandler.errorReceiver) {
+            progressEmitter.subscriber = { progress, done -> onDownloadProgress(progress, done) }
+            var stepNumber = 0
+            uiThread { viewState.showLoading(); viewState.showStepNumber(++stepNumber) }
+                .run { interactor.downloadDatabaseFile() }
+                .let { bytes -> interactor.saveDatabaseFile(bytes) }
+                .also { uiThread { viewState.showUnzipping(); viewState.showStepNumber(++stepNumber) } }
+                .let { zipArchive -> interactor.unzip(zipArchive, zipArchive.parentFile) }
+                .also { uiThread { viewState.showParsing(); viewState.showStepNumber(++stepNumber) } }
+                .let { file -> interactor.parseXlsDocument(file) }
+                .also { uiThread { viewState.showSaving(); viewState.showStepNumber(++stepNumber) } }
+                .let { xlsDocument -> interactor.saveDocumentData(xlsDocument.data) }
+                .let { interactor.getBooksAndCategoriesCount() }
+                .also { statistics -> uiThread { viewState.showSuccess(statistics) } }
+        }.apply { loadDatabaseTask = this }
+
+    private fun onDownloadProgress(progress: Int, done: Boolean) =
+        doAsync(errorHandler.errorReceiver) {
             uiThread { viewState.update(progress, done) }
+        }
+
+    fun stopDownloading() {
+        doAsync(errorHandler.errorReceiver) {
+            loadDatabaseTask.cancel(true)
+            uiThread { viewState.showInitialViewState() }
         }
     }
 
-    fun stopDownloading() {
-        loadDatabaseTask.cancel(true)
-        viewState.showInitialViewState()
-    }
-
-    fun flowFinished() {
-        initialInteractor.setDatabaseIsLoaded()
-        viewState.showMainScreen()
-    }
+    fun flowFinished() =
+        doAsync(errorHandler.errorReceiver) {
+            interactor.setDatabaseLoaded()
+            uiThread { viewState.showMainScreen() }
+        }
 }

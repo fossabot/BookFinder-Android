@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <id name="id_recycler_categories">1234</id>
+    <id name="id_recycler_books">1235</id>
 </resources>

@@ -1,7 +1,5 @@
 package suhockii.dev.bookfinder.domain
 
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.doAsyncResult
 import suhockii.dev.bookfinder.di.DatabaseFileUrl
 import suhockii.dev.bookfinder.di.DownloadedFileName
 import suhockii.dev.bookfinder.domain.model.Book
@@ -20,34 +18,30 @@ class InitialInteractor @Inject constructor(
     @DatabaseFileUrl private val fileUrl: String,
     @DownloadedFileName private val downloadedFileName: String
 ) {
-    fun downloadDatabaseFile() = doAsyncResult {
+    fun downloadDatabaseFile() =
         serverRepository.getFile(fileUrl)
-    }
 
-    fun saveDatabaseFile(bytes: ByteArray) = doAsyncResult {
+    fun saveDatabaseFile(bytes: ByteArray) =
         fileSystemRepository.saveFile(downloadedFileName, bytes)
-    }
 
-    fun unzip(fromFile: File, toDirectory: File) = doAsyncResult {
+    fun unzip(fromFile: File, toDirectory: File) =
         fileSystemRepository.unzip(fromFile, toDirectory)
-    }
 
-    fun parseXlsDocument(xlsFile: File) = doAsyncResult {
+    fun parseXlsDocument(xlsFile: File) =
         fileSystemRepository.parseXlsDocument(xlsFile)
-    }
 
-    fun saveDocumentData(data: Map<String, Collection<Book>>) = doAsync {
+    fun saveDocumentData(data: Map<String, Collection<Book>>) {
         databaseRepository.saveCategories(data.keys)
         databaseRepository.saveBooks(data.values.flatMap { books -> books }.toList())
     }
 
-    fun getBooksAndCategoriesCount() = doAsyncResult {
+    fun getBooksAndCategoriesCount(): Pair<Int, Int> {
         val categoriesCount = databaseRepository.getCategories().count()
         val booksCount = databaseRepository.getBooks().count()
-        categoriesCount to booksCount
+        return categoriesCount to booksCount
     }
 
-    fun setDatabaseIsLoaded() {
+    fun setDatabaseLoaded() {
         settingsRepository.isDatabaseLoaded = true
     }
 }

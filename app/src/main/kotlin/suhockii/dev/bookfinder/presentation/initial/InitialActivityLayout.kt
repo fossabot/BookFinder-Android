@@ -3,6 +3,7 @@ package suhockii.dev.bookfinder.presentation.initial
 import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -14,12 +15,13 @@ class InitialActivityLayout @Inject constructor() : AnkoComponent<Initialization
     internal lateinit var textTitle: TextView
     internal lateinit var textDescription: TextView
     internal lateinit var textProgress: TextView
-    internal lateinit var progressViewGroup: View
+    internal lateinit var progressBar: View
     internal lateinit var btnExit: View
     internal lateinit var btnDownload: View
     internal lateinit var btnStop: View
     internal lateinit var btnContinue: View
     internal lateinit var btnRetry: View
+    internal lateinit var ivTop: ImageView
 
     override fun createView(ui: AnkoContext<InitializationActivity>) = with(ui) {
 
@@ -27,7 +29,9 @@ class InitialActivityLayout @Inject constructor() : AnkoComponent<Initialization
             frameLayout {
                 backgroundResource = R.color.blue
 
-                imageView(R.drawable.ic_info).lparams {
+                imageView(R.drawable.ic_info) {
+                    ivTop = this
+                }.lparams {
                     gravity = Gravity.CENTER
                     margin = dip(28)
                 }
@@ -45,22 +49,12 @@ class InitialActivityLayout @Inject constructor() : AnkoComponent<Initialization
             }
 
             linearLayout {
-                frameLayout {
-                    progressViewGroup = this
+
+                themedProgressBar(R.style.ColoredProgressBar) {
+                    progressBar = this
                     visibility = View.GONE
-
-                    themedProgressBar(R.style.ColoredProgressBar).lparams {
-                        gravity = Gravity.CENTER
-                    }
-
-                    textView("0%") {
-                        textProgress = this
-                        textSize = 12F
-                    }.lparams {
-                        gravity = Gravity.CENTER
-                    }
                 }.lparams {
-                    gravity = Gravity.CENTER_VERTICAL
+                    gravity = Gravity.CENTER
                     leftMargin = dip(22)
                 }
 
@@ -71,6 +65,13 @@ class InitialActivityLayout @Inject constructor() : AnkoComponent<Initialization
                 }.lparams {
                     leftMargin = dip(24)
                     gravity = Gravity.CENTER_VERTICAL
+                }
+
+                textView {
+                    textProgress = this
+                    textSize = 12F
+                }.lparams {
+                    gravity = Gravity.CENTER
                 }
             }.lparams(matchParent, dip(64)) {
                 topMargin = dip(16)

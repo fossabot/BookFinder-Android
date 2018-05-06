@@ -1,6 +1,7 @@
 package suhockii.dev.bookfinder.presentation.initial
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.Window
@@ -33,7 +34,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     @Inject
     lateinit var layout: InitialActivityLayout
 
-    private lateinit var dotsTimer: Timer
+    private var dotsTimer: Timer? = null
 
     @ProvidePresenter
     fun providePresenter(): InitialPresenter =
@@ -63,21 +64,26 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         }
     }
 
+    override fun showStepNumber(stepNumer: Int) {
+        layout.textTitle.text = getString(R.string.step_info, stepNumer, STEPS_COUNT)
+    }
+
     override fun showLoading() = with(layout) {
         textProgress.visibility = View.VISIBLE
         textProgress.text = getString(R.string.percent, 0)
-        textTitle.textResource = R.string.please_wait
         textDescription.textResource = R.string.downloading
-        progressViewGroup.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
         btnStop.visibility = View.VISIBLE
         btnExit.visibility = View.GONE
         btnDownload.visibility = View.GONE
         btnRetry.visibility = View.GONE
-        startDotsAnimation()
+        textProgress.visibility = View.VISIBLE
     }
 
-    override fun showUnzipping() {
-        layout.textDescription.textResource = R.string.unzipping
+    override fun showUnzipping() = with(layout) {
+        textDescription.textResource = R.string.unzipping
+        textProgress.visibility = View.GONE
+        startDotsAnimation()
     }
 
     override fun showParsing() {
@@ -88,11 +94,14 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         layout.textDescription.textResource = R.string.saving
     }
 
-    override fun showSuccess(categoriesCount: Int, booksCount: Int) = with(layout) {
+    override fun showSuccess(statistics: Pair<Int, Int>) = with(layout) {
         cancelDotsAnimation()
-        progressViewGroup.visibility = View.GONE
-        textDescription.text = getString(R.string.downloading_statistics, booksCount, categoriesCount)
+        val (categoriesCount, booksCount) = statistics
         textTitle.textResource = R.string.success
+        textDescription.text = getString(R.string.downloading_statistics, booksCount, categoriesCount)
+        val drawableSuccess = ContextCompat.getDrawable(ivTop.context, R.drawable.ic_success)
+        ivTop.setImageDrawable(drawableSuccess)
+        progressBar.visibility = View.GONE
         btnStop.visibility = View.GONE
         btnExit.visibility = View.GONE
         btnDownload.visibility = View.GONE
@@ -108,7 +117,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         cancelDotsAnimation()
         btnDownload.visibility = View.VISIBLE
         btnExit.visibility = View.VISIBLE
-        progressViewGroup.visibility = View.GONE
+        progressBar.visibility = View.GONE
         btnStop.visibility = View.GONE
         textTitle.text = getString(R.string.info)
         textDescription.textResource = R.string.database_load_need
@@ -122,11 +131,11 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         btnStop.visibility = View.GONE
         btnExit.visibility = View.VISIBLE
         btnDownload.visibility = View.GONE
-        progressViewGroup.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun cancelDotsAnimation() {
-        dotsTimer.cancel()
+        dotsTimer?.cancel()
         val previousText = layout.textDescription.text.replace("\\.+".toRegex(), "")
         layout.textDescription.text = previousText
     }
@@ -149,6 +158,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
 
     companion object {
         private const val DOTS_ANIMATION_DELAY = 350L
+        private const val STEPS_COUNT = 4
         private const val MAX_DOTS_COUNT = 3
         private const val STRING_EMPTY = ""
         private const val STRING_1_DOT = "."

@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import suhockii.dev.bookfinder.domain.model.Category
 
 
-class CategoriesViewHolder(
+class CategoryViewHolder(
     private var categoryItemLayout: CategoryItemLayout
 ) : RecyclerView.ViewHolder(categoryItemLayout.parent) {
 

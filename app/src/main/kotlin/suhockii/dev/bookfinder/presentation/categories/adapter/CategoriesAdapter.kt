@@ -6,28 +6,28 @@ import android.view.ViewGroup
 import org.jetbrains.anko.AnkoContextImpl
 import org.jetbrains.anko.AnkoLogger
 import suhockii.dev.bookfinder.di.DI
-import suhockii.dev.bookfinder.di.wrapper.CategoriesDiffer
 import suhockii.dev.bookfinder.domain.model.Category
 import toothpick.Toothpick
 import javax.inject.Inject
 
 class CategoriesAdapter @Inject constructor() :
-    RecyclerView.Adapter<CategoriesViewHolder>(), AnkoLogger {
+    RecyclerView.Adapter<CategoryViewHolder>(), AnkoLogger {
 
     private lateinit var differ: AsyncListDiffer<Category>
     private lateinit var onCategoryClickListener: OnCategoryClickListener
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        differ = Toothpick.openScopes(DI.APP_SCOPE, DI.CATEGORIES_ACTIVITY_SCOPE)
-            .getInstance(CategoriesDiffer::class.java).get()
+        if (!this::differ.isInitialized) differ =
+                Toothpick.openScopes(DI.APP_SCOPE, DI.CATEGORIES_ACTIVITY_SCOPE)
+                    .getInstance(CategoriesDiffer::class.java).get()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val categoryItemLayout = Toothpick.openScopes(DI.APP_SCOPE, DI.CATEGORIES_ACTIVITY_SCOPE)
             .getInstance(CategoryItemLayout::class.java)
         categoryItemLayout.createView(AnkoContextImpl(parent.context, parent, false))
-        val viewHolder = CategoriesViewHolder(categoryItemLayout)
+        val viewHolder = CategoryViewHolder(categoryItemLayout)
         viewHolder.itemView.setOnClickListener {
             val category = differ.currentList[viewHolder.adapterPosition]
             onCategoryClickListener.onCategoryClick(category)
@@ -38,7 +38,7 @@ class CategoriesAdapter @Inject constructor() :
     override fun getItemCount(): Int =
         differ.currentList.size
 
-    override fun onBindViewHolder(holder: CategoriesViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) =
         holder.bind(differ.currentList[position])
 
     fun submitList(list: List<Category>) =

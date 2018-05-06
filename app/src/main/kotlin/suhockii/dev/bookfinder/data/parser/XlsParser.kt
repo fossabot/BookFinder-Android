@@ -52,8 +52,8 @@ class XlsParser @Inject constructor() : AnkoLogger {
                             shortDescription = pop(),
                             fullDescription = pop(),
                             price = pop().toDouble(),
-                            iconLink = pop(),
-                            productLink = pop(),
+                            iconLink = pop().replace("mybooks.shop.by", "mybooks.by"),
+                            productLink = pop().replace("mybooks.shop.by", "mybooks.by"),
                             website = pop(),
                             productCode = pop(),
                             status = pop()

@@ -6,7 +6,6 @@
     <string name="_continue">Continue</string>
     <string name="retry">Retry</string>
     <string name="exit">Exit</string>
-    <string name="please_wait">Please wait</string>
     <string name="downloading">Downloading</string>
     <string name="parsing">Parsing</string>
     <string name="saving">Saving</string>
@@ -15,12 +14,16 @@
     <string name="info">Info</string>
     <string name="success">Success!</string>
     <string name="downloading_statistics">Information about %d books from %d categories was saved successfully.</string>
+    <string name="step_info">Step %d of %d</string>
     <string name="error_network">Please, check your connection to the Internet.</string>
     <string name="error_unknown">Unknown error.</string>
     <string name="out_of_memory">Out of memory.</string>
     <string name="corrupted_file">Unfortunately, downloaded file is corrupted. Please, tell the developers about this issue.</string>
     <string name="error">Error</string>
     <string name="categories">Categories</string>
+    <string name="rubles">%.2f rub.</string>
+    <string name="empty_screen">The current database does not contains any books on this category</string>
+    <string name="back">Back</string>
 
-    <string name="percent" translatable="false">%d%%</string>
+    <string name="percent" translatable="false">" "(%d%%)</string>
 </resources>

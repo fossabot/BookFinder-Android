@@ -1,4 +1,4 @@
-package suhockii.dev.bookfinder.di.wrapper
+package suhockii.dev.bookfinder.presentation.categories.adapter
 
 import android.support.v7.util.DiffUtil
 import suhockii.dev.bookfinder.domain.model.Category
