@@ -8,6 +8,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 import suhockii.dev.bookfinder.di.DI
 import suhockii.dev.bookfinder.di.module.BooksActivityModule
 import suhockii.dev.bookfinder.domain.model.Book
@@ -15,6 +16,7 @@ import suhockii.dev.bookfinder.domain.model.Category
 import suhockii.dev.bookfinder.presentation.books.adapter.BooksAdapter
 import suhockii.dev.bookfinder.presentation.books.adapter.OnBookClickListener
 import suhockii.dev.bookfinder.presentation.categories.CategoriesActivity
+import suhockii.dev.bookfinder.presentation.details.DetailsActivity
 import toothpick.Toothpick
 import javax.inject.Inject
 
@@ -25,7 +27,7 @@ class BooksActivity : MvpAppCompatActivity(), BooksView, OnBookClickListener {
     lateinit var presenter: BooksPresenter
 
     @Inject
-    lateinit var layout: BooksActivityLayout
+    lateinit var layout: BooksUI
 
     @Inject
     lateinit var adapter: BooksAdapter
@@ -56,6 +58,7 @@ class BooksActivity : MvpAppCompatActivity(), BooksView, OnBookClickListener {
         finish()
         return true
     }
+
     override fun onDestroy() {
         super.onDestroy()
         if (isFinishing) Toothpick.closeScope(DI.BOOKS_ACTIVITY_SCOPE)
@@ -78,7 +81,11 @@ class BooksActivity : MvpAppCompatActivity(), BooksView, OnBookClickListener {
     }
 
     override fun onBookClick(book: Book) {
+        startActivity<DetailsActivity>(ARG_BOOK to book)
+    }
 
+    companion object {
+        const val ARG_BOOK = "ARG_BOOK"
     }
 }
 

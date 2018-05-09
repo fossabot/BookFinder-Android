@@ -8,14 +8,14 @@ import android.widget.TextView
 import org.jetbrains.anko.*
 import javax.inject.Inject
 
-class CategoryItemLayout @Inject constructor() : AnkoComponent<ViewGroup> {
+class CategoryItemUI @Inject constructor() : AnkoComponent<ViewGroup> {
     lateinit var parent: View
     lateinit var name: TextView
 
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
 
         frameLayout {
-            this@CategoryItemLayout.parent = this
+            this@CategoryItemUI.parent = this
 
             frameLayout {
 

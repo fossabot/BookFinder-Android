@@ -25,7 +25,7 @@ class CategoriesAdapter @Inject constructor() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val categoryItemLayout = Toothpick.openScopes(DI.APP_SCOPE, DI.CATEGORIES_ACTIVITY_SCOPE)
-            .getInstance(CategoryItemLayout::class.java)
+            .getInstance(CategoryItemUI::class.java)
         categoryItemLayout.createView(AnkoContextImpl(parent.context, parent, false))
         val viewHolder = CategoryViewHolder(categoryItemLayout)
         viewHolder.itemView.setOnClickListener {

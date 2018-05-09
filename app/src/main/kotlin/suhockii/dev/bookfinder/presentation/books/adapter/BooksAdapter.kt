@@ -26,7 +26,7 @@ class BooksAdapter @Inject constructor() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val bookItemLayout = Toothpick.openScopes(DI.APP_SCOPE, DI.CATEGORIES_ACTIVITY_SCOPE)
-            .getInstance(BookItemLayout::class.java)
+            .getInstance(BookItemUI::class.java)
         bookItemLayout.createView(AnkoContextImpl(parent.context, parent, false))
 
         val viewHolder = BookViewHolder(bookItemLayout)

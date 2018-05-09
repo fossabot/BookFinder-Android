@@ -7,12 +7,13 @@ import android.view.Gravity
 import android.view.View
 import android.widget.ProgressBar
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.tintedImageView
 import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
 import suhockii.dev.bookfinder.R
 import javax.inject.Inject
 
 
-class BooksActivityLayout @Inject constructor() : AnkoComponent<BooksActivity> {
+class BooksUI @Inject constructor() : AnkoComponent<BooksActivity> {
     lateinit var recyclerView: RecyclerView
     lateinit var progressBar: ProgressBar
     lateinit var emptyView: View
@@ -38,18 +39,18 @@ class BooksActivityLayout @Inject constructor() : AnkoComponent<BooksActivity> {
                 gravity = Gravity.CENTER
                 visibility = View.GONE
 
-                imageView(R.drawable.ic_info).apply {
+                tintedImageView(R.drawable.ic_info).apply {
                     DrawableCompat.wrap(drawable).apply {
                         DrawableCompat.setTint(this, Color.GRAY)
                         setImageDrawable(this)
                     }
-                }
 
-                textView(R.string.empty_screen) {
-                    gravity = Gravity.CENTER
-                }.lparams {
-                    topMargin = dip(16)
-                    bottomMargin = dip(16)
+                    textView(R.string.empty_screen) {
+                        gravity = Gravity.CENTER
+                    }.lparams {
+                        topMargin = dip(16)
+                        bottomMargin = dip(16)
+                    }
                 }
             }.lparams {
                 gravity = Gravity.CENTER

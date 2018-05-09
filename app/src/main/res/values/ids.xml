@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <id name="id_recycler_categories">1234</id>
-    <id name="id_recycler_books">1235</id>
+    <id name="id_recycler_categories">1000</id>
+    <id name="id_recycler_books">1001</id>
+    <id name="id_app_bar_details">1002</id>
+    <id name="id_fab">1003</id>
 </resources>

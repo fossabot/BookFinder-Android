@@ -12,7 +12,6 @@ import toothpick.config.Module
 
 class BooksActivityModule(category: Category) : Module() {
     init {
-        //UI
         bind(Category::class.java).toInstance(category)
         bind(BooksAdapter::class.java).singletonInScope()
         bind(LinearLayoutManager::class.java).toProvider(LayoutManagerProvider::class.java).singletonInScope()

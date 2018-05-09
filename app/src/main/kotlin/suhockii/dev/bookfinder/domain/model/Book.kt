@@ -1,6 +1,8 @@
 package suhockii.dev.bookfinder.domain.model
 
-interface Book {
+import android.os.Parcelable
+
+interface Book: Parcelable {
     val category: String
     val shortName: String
     val fullName: String

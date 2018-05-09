@@ -9,7 +9,7 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 
-class DeviceStorageRepository @Inject constructor(
+class LocalStorageRepository @Inject constructor(
     @DownloadDirectoryPath private val downloadDirectoryPath: String,
     private val xlsParser: XlsParser
 ) : FileSystemRepository {

@@ -32,7 +32,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
     lateinit var presenter: InitialPresenter
 
     @Inject
-    lateinit var layout: InitialActivityLayout
+    lateinit var layout: InitialUI
 
     private var dotsTimer: Timer? = null
 

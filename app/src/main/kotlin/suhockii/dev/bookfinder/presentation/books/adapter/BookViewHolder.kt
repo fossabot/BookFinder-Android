@@ -8,7 +8,7 @@ import suhockii.dev.bookfinder.domain.model.Book
 
 
 class BookViewHolder(
-    private val layout: BookItemLayout,
+    private val layout: BookItemUI,
     private val context: Context = layout.parent.context
 ) : RecyclerView.ViewHolder(layout.parent) {
 

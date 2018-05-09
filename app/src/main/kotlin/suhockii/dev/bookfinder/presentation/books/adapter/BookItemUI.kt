@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.*
-import suhockii.dev.bookfinder.R
 import javax.inject.Inject
 
-class BookItemLayout @Inject constructor() : AnkoComponent<ViewGroup> {
+class BookItemUI @Inject constructor() : AnkoComponent<ViewGroup> {
     lateinit var parent: View
     lateinit var name: TextView
     lateinit var price: TextView
@@ -20,11 +19,11 @@ class BookItemLayout @Inject constructor() : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>) = with(ui) {
 
         frameLayout {
-            this@BookItemLayout.parent = this
+            this@BookItemUI.parent = this
 
             linearLayout {
 
-                imageView(R.drawable.ic_info) {
+                imageView {
                     icon = this
                 }.lparams(dip(56), dip(56)) {
                     margin = dip(8)

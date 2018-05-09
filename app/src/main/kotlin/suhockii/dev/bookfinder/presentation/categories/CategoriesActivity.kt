@@ -24,7 +24,7 @@ class CategoriesActivity : MvpAppCompatActivity(), CategoriesView, OnCategoryCli
     lateinit var presenter: CategoriesPresenter
 
     @Inject
-    lateinit var layout: CategoriesActivityLayout
+    lateinit var layout: CategoriesUI
 
     @Inject
     lateinit var adapter: CategoriesAdapter

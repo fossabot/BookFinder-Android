@@ -5,7 +5,7 @@ import suhockii.dev.bookfinder.domain.model.Category
 
 
 class CategoryViewHolder(
-    private var categoryItemLayout: CategoryItemLayout
+    private var categoryItemLayout: CategoryItemUI
 ) : RecyclerView.ViewHolder(categoryItemLayout.parent) {
 
     fun bind(category: Category) {

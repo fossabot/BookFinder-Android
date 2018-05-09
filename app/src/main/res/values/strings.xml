@@ -24,6 +24,18 @@
     <string name="rubles">%.2f rub.</string>
     <string name="empty_screen">The current database does not contains any books on this category</string>
     <string name="back">Back</string>
+    <string name="isbn">ISBN</string>
+    <string name="author">Author</string>
+    <string name="publisher">Publisher</string>
+    <string name="year">Year</string>
+    <string name="cover">Cover</string>
+    <string name="pages">Pages</string>
+    <string name="id">ID</string>
+    <string name="id2">ID2</string>
+    <string name="availability">Availability</string>
+    <string name="deadlines">Deadlines</string>
+    <string name="weight">Weight</string>
+    <string name="series">Series</string>
 
     <string name="percent" translatable="false">" "(%d%%)</string>
 </resources>

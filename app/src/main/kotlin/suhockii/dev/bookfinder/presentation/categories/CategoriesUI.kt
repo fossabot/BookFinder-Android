@@ -8,7 +8,7 @@ import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
 import suhockii.dev.bookfinder.R
 import javax.inject.Inject
 
-class CategoriesActivityLayout @Inject constructor() : AnkoComponent<CategoriesActivity> {
+class CategoriesUI @Inject constructor() : AnkoComponent<CategoriesActivity> {
     lateinit var recyclerView: RecyclerView
 
     override fun createView(ui: AnkoContext<CategoriesActivity>) = with(ui) {

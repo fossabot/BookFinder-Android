@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import suhockii.dev.bookfinder.BuildConfig
 import suhockii.dev.bookfinder.data.network.CloudStorageApi
 import suhockii.dev.bookfinder.data.network.interceptor.ProgressEmitter
-import suhockii.dev.bookfinder.data.repository.DeviceStorageRepository
+import suhockii.dev.bookfinder.data.repository.LocalStorageRepository
 import suhockii.dev.bookfinder.data.repository.GoogleDriveRepository
 import suhockii.dev.bookfinder.di.provider.network.ApiProvider
 import suhockii.dev.bookfinder.di.provider.network.OkHttpClientProvider
@@ -15,12 +15,12 @@ import suhockii.dev.bookfinder.di.DownloadDirectoryPath
 import suhockii.dev.bookfinder.di.DownloadedFileName
 import suhockii.dev.bookfinder.domain.repository.FileSystemRepository
 import suhockii.dev.bookfinder.domain.repository.ServerRepository
-import suhockii.dev.bookfinder.presentation.initial.InitialActivityLayout
+import suhockii.dev.bookfinder.presentation.initial.InitialUI
 import toothpick.config.Module
 
 class InitialActivityModule(context: Context) : Module() {
     init {
-        bind(InitialActivityLayout::class.java).singletonInScope()
+        bind(InitialUI::class.java).singletonInScope()
 
         //Network
         bind(String::class.java).withName(DownloadDirectoryPath::class.java).toInstance(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).path)
@@ -32,6 +32,6 @@ class InitialActivityModule(context: Context) : Module() {
 
         //Repository
         bind(ServerRepository::class.java).to(GoogleDriveRepository::class.java).singletonInScope()
-        bind(FileSystemRepository::class.java).to(DeviceStorageRepository::class.java).singletonInScope()
+        bind(FileSystemRepository::class.java).to(LocalStorageRepository::class.java).singletonInScope()
     }
 }
