@@ -42,38 +42,46 @@ class InitialPresenter @Inject constructor(
         progressEmitter.subscriber = null
     }
 
-    fun loadDatabase() =
-        doAsync(errorHandler.errorReceiver) {
-            progressEmitter.subscriber = { progress, done -> onDownloadProgress(progress, done) }
-            var stepNumber = 0
-            uiThread { viewState.showLoading(); viewState.showStepNumber(++stepNumber) }
-                .run { interactor.downloadDatabaseFile() }
-                .let { bytes -> interactor.saveDatabaseFile(bytes) }
-                .also { uiThread { viewState.showUnzipping(); viewState.showStepNumber(++stepNumber) } }
-                .let { zipArchive -> interactor.unzip(zipArchive, zipArchive.parentFile) }
-                .also { uiThread { viewState.showParsing(); viewState.showStepNumber(++stepNumber) } }
-                .let { file -> interactor.parseXlsDocument(file) }
-                .also { uiThread { viewState.showSaving(); viewState.showStepNumber(++stepNumber) } }
-                .let { xlsDocument -> interactor.saveDocumentData(xlsDocument.data) }
-                .let { interactor.getBooksAndCategoriesCount() }
-                .also { statistics -> uiThread { viewState.showSuccess(statistics) } }
-        }.apply { loadDatabaseTask = this }
-
-    private fun onDownloadProgress(progress: Int, done: Boolean) =
-        doAsync(errorHandler.errorReceiver) {
-            uiThread { viewState.update(progress, done) }
+    fun loadDatabase() = doAsync(errorHandler.errorReceiver) {
+        var currentStep = ProgressStep.LOADING
+        progressEmitter.subscriber = { progress, done ->
+            uiThread {
+                viewState.showProgress(progress, done)
+                if (currentStep == ProgressStep.ANALYZING) {
+                    currentStep = ProgressStep.PARSING
+                    viewState.showLoadingStep(ProgressStep.PARSING)
+                }
+            }
         }
-
-    fun stopDownloading() {
-        doAsync(errorHandler.errorReceiver) {
-            loadDatabaseTask.cancel(true)
-            uiThread { viewState.showInitialViewState() }
+        uiThread {
+            viewState.showLoadingStep(ProgressStep.LOADING)
         }
+        val bytes = interactor.downloadDatabaseFile()
+        val zipFile = interactor.saveDatabaseFile(bytes)
+        uiThread {
+            viewState.showLoadingStep(ProgressStep.UNZIPPING)
+        }
+        val unzippedFile = interactor.unzip(zipFile, zipFile.parentFile)
+        uiThread {
+            currentStep = ProgressStep.ANALYZING
+            viewState.showLoadingStep(ProgressStep.ANALYZING)
+        }
+        val xlsDocument = interactor.parseXlsDocument(unzippedFile)
+        uiThread {
+            viewState.showLoadingStep(ProgressStep.SAVING)
+        }
+        interactor.saveDocumentData(xlsDocument.data)
+        val statistics = interactor.getBooksAndCategoriesCount()
+        uiThread { viewState.showSuccess(statistics) }
+    }.apply { loadDatabaseTask = this }
+
+    fun stopDownloading() = doAsync(errorHandler.errorReceiver) {
+        loadDatabaseTask.cancel(true)
+        uiThread { viewState.showInitialViewState() }
     }
 
-    fun flowFinished() =
-        doAsync(errorHandler.errorReceiver) {
-            interactor.setDatabaseLoaded()
-            uiThread { viewState.showMainScreen() }
-        }
+    fun flowFinished() = doAsync(errorHandler.errorReceiver) {
+        interactor.setDatabaseLoaded()
+        uiThread { viewState.showMainScreen() }
+    }
 }

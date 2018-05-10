@@ -3,12 +3,8 @@ package suhockii.dev.bookfinder.data.network.interceptor
 import javax.inject.Inject
 
 class ProgressEmitter @Inject constructor() {
-    var subscriber: ((downloadedPercent: Int, done: Boolean) -> Unit)? = null
+    var subscriber: ((progress: Int, done: Boolean) -> Unit)? = null
 
-    fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-        subscriber?.apply {
-            val downloadedPercent = (bytesRead / contentLength.toDouble() * 100).toInt()
-            invoke(downloadedPercent, done)
-        }
-    }
+    fun updateProgress(progress: Int, done: Boolean) =
+        subscriber?.invoke(progress, done)
 }

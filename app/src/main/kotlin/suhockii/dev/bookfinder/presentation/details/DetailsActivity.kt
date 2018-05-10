@@ -59,17 +59,14 @@ class DetailsActivity : MvpAppCompatActivity(), DetailsView {
         tvFullName.text = book.fullName
         tvPrice.text = getString(R.string.rubles, book.price)
         tvISBN.text = book.productCode
-        tvAuthor.text = book.shortDescription
-        tvPublisher.text = book.fullDescription
-        tvYear.text = "?"
-        tvCover.text = "?"
-        tvPageCount.text = "?"
-        tvSeries.text = "?"
-        tvId.text = "?"
-        tvId2.text = "?"
+        tvAuthor.text = book.author
+        tvPublisher.text = book.publisher
+        tvYear.text = book.year
+        tvCover.text = book.cover
+        tvPageCount.text = book.pageCount
+        tvSeries.text = book.series
         tvAvailability.text = book.status
-        tvDeadlines.text = "?"
-        tvWeight.text = "?"
+        tvDescription.text = book.description
     }
 }
 

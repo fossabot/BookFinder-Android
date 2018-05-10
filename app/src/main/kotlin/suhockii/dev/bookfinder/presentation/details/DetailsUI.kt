@@ -36,11 +36,8 @@ class DetailsUI @Inject constructor() : AnkoComponent<DetailsActivity>, AnkoLogg
     lateinit var tvCover: TextView
     lateinit var tvPageCount: TextView
     lateinit var tvSeries: TextView
-    lateinit var tvId: TextView
-    lateinit var tvId2: TextView
     lateinit var tvAvailability: TextView
-    lateinit var tvDeadlines: TextView
-    lateinit var tvWeight: TextView
+    lateinit var tvDescription: TextView
     private var windowHeight = 0
 
     override fun createView(ui: AnkoContext<DetailsActivity>) = with(ui) {
@@ -58,7 +55,7 @@ class DetailsUI @Inject constructor() : AnkoComponent<DetailsActivity>, AnkoLogg
                     maxLines = 2
                     fitsSystemWindows = true
                     setContentScrimResource(R.color.colorPrimary)
-                    setExpandedTitleMargin(dip(16), dip(16), dip(16), dip(16))
+                    setExpandedTitleMargin(dip(16), dip(16), dip(32), dip(16))
                     setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Headline)
 
                     frameLayout {
@@ -138,28 +135,13 @@ class DetailsUI @Inject constructor() : AnkoComponent<DetailsActivity>, AnkoLogg
                     }
 
                     linearLayout {
-                        textView(R.string.id).lparams(0, matchParent) { weight = 0.5f }
-                        textView { tvId = this }.lparams(0, matchParent) { weight = 0.5f }
-                    }
-
-                    linearLayout {
-                        textView(R.string.id2).lparams(0, matchParent) { weight = 0.5f }
-                        textView { tvId2 = this }.lparams(0, matchParent) { weight = 0.5f }
-                    }
-
-                    linearLayout {
                         textView(R.string.availability).lparams(0, matchParent) { weight = 0.5f }
                         textView { tvAvailability = this }.lparams(0, matchParent) { weight = 0.5f }
                     }
 
                     linearLayout {
-                        textView(R.string.deadlines).lparams(0, matchParent) { weight = 0.5f }
-                        textView { tvDeadlines = this }.lparams(0, matchParent) { weight = 0.5f }
-                    }
-
-                    linearLayout {
-                        textView(R.string.weight).lparams(0, matchParent) { weight = 0.5f }
-                        textView { tvWeight = this }.lparams(0, matchParent) { weight = 0.5f }
+                        textView(R.string.description).lparams(0, matchParent) { weight = 0.5f }
+                        textView { tvDescription = this }.lparams(0, matchParent) { weight = 0.5f }
                     }
                 }
 

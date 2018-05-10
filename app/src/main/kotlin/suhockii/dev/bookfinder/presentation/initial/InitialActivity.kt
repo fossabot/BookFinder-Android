@@ -56,19 +56,31 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         if (isFinishing) Toothpick.closeScope(DI.INITIALIZATION_ACTIVITY_SCOPE)
     }
 
-    override fun update(downloadedPercent: Int, done: Boolean) {
+    override fun showProgress(progress: Int, done: Boolean) {
         if (done) layout.textProgress.visibility = View.GONE
         else layout.textProgress.apply {
-            text = getString(R.string.percent, downloadedPercent)
+            text = getString(R.string.percent, progress)
             visibility = View.VISIBLE
         }
     }
 
-    override fun showStepNumber(stepNumer: Int) {
-        layout.textTitle.text = getString(R.string.step_info, stepNumer, STEPS_COUNT)
+    override fun showLoadingStep(step: ProgressStep) {
+        layout.textTitle.text =
+                getString(R.string.step_info, step.number, ProgressStep.values().size)
+        when (step) {
+            ProgressStep.LOADING -> showLoading()
+
+            ProgressStep.UNZIPPING -> showUnzipping()
+
+            ProgressStep.ANALYZING -> showAnalyzing()
+
+            ProgressStep.PARSING -> showParsing()
+
+            ProgressStep.SAVING -> showSaving()
+        }
     }
 
-    override fun showLoading() = with(layout) {
+    private fun showLoading() = with(layout) {
         textProgress.visibility = View.VISIBLE
         textProgress.text = getString(R.string.percent, 0)
         textDescription.textResource = R.string.downloading
@@ -80,25 +92,32 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
         textProgress.visibility = View.VISIBLE
     }
 
-    override fun showUnzipping() = with(layout) {
+    private fun showUnzipping() = with(layout) {
         textDescription.textResource = R.string.unzipping
         textProgress.visibility = View.GONE
         startDotsAnimation()
     }
 
-    override fun showParsing() {
+    private fun showAnalyzing() {
+        layout.textDescription.textResource = R.string.analyzing
+    }
+
+    private fun showParsing() {
+        cancelDotsAnimation()
         layout.textDescription.textResource = R.string.parsing
     }
 
-    override fun showSaving() {
+    private fun showSaving() {
         layout.textDescription.textResource = R.string.saving
+        startDotsAnimation()
     }
 
     override fun showSuccess(statistics: Pair<Int, Int>) = with(layout) {
         cancelDotsAnimation()
         val (categoriesCount, booksCount) = statistics
         textTitle.textResource = R.string.success
-        textDescription.text = getString(R.string.downloading_statistics, booksCount, categoriesCount)
+        textDescription.text =
+                getString(R.string.downloading_statistics, booksCount, categoriesCount)
         val drawableSuccess = ContextCompat.getDrawable(ivTop.context, R.drawable.ic_success)
         ivTop.setImageDrawable(drawableSuccess)
         progressBar.visibility = View.GONE
@@ -158,7 +177,7 @@ class InitializationActivity : MvpAppCompatActivity(), InitialView, AnkoLogger {
 
     companion object {
         private const val DOTS_ANIMATION_DELAY = 350L
-        private const val STEPS_COUNT = 4
+        private const val STEPS_COUNT = 5
         private const val MAX_DOTS_COUNT = 3
         private const val STRING_EMPTY = ""
         private const val STRING_1_DOT = "."

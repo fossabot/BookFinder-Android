@@ -2,6 +2,7 @@ package suhockii.dev.bookfinder.data.database.entity
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
 import suhockii.dev.bookfinder.domain.model.Book
@@ -18,25 +19,41 @@ import suhockii.dev.bookfinder.domain.model.Book
     ]
 )
 data class BookEntity(
-    override val category: String,
-    override val shortName: String,
-    override val fullName: String,
-    override val shortDescription: String,
-    override val fullDescription: String,
-    override val price: Double,
-    override val iconLink: String,
-    override val productLink: String,
-    override val website: String,
-    override val productCode: String,
-    override val status: String
+    override var category: String = "",
+    override var shortName: String = "",
+    override var fullName: String = "",
+    override var price: Double = 0.0,
+    override var iconLink: String = "",
+    override var productLink: String = "",
+    override var website: String = "",
+    override var productCode: String = "",
+    override var status: String = "",
+    override var publisher: String? = null,
+    override var author: String? = null,
+    override var series: String? = null,
+    override var format: String? = null,
+    override var year: String? = null,
+    override var pageCount: String? = null,
+    override var cover: String? = null,
+    override var description: String? = null,
+    @Ignore var shortDescription: String = "",
+    @Ignore var fullDescription: String = ""
 ) : Book {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
         parcel.readDouble(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -48,14 +65,22 @@ data class BookEntity(
         parcel.writeString(category)
         parcel.writeString(shortName)
         parcel.writeString(fullName)
-        parcel.writeString(shortDescription)
-        parcel.writeString(fullDescription)
         parcel.writeDouble(price)
         parcel.writeString(iconLink)
         parcel.writeString(productLink)
         parcel.writeString(website)
         parcel.writeString(productCode)
         parcel.writeString(status)
+        parcel.writeString(publisher)
+        parcel.writeString(author)
+        parcel.writeString(series)
+        parcel.writeString(format)
+        parcel.writeString(year)
+        parcel.writeString(pageCount)
+        parcel.writeString(cover)
+        parcel.writeString(description)
+        parcel.writeString(shortDescription)
+        parcel.writeString(fullDescription)
     }
 
     override fun describeContents(): Int {

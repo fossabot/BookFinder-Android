@@ -7,7 +7,7 @@ import java.io.IOException
 
 internal class ProgressResponseBody(
     private val responseBody: ResponseBody,
-    private val progressListener: ProgressEmitter
+    private val progressEmitter: ProgressEmitter
 ) : ResponseBody() {
     private var bufferedSource: BufferedSource? = null
 
@@ -33,14 +33,12 @@ internal class ProgressResponseBody(
 
             @Throws(IOException::class)
             override fun read(sink: Buffer, byteCount: Long): Long {
+                val contentLength = responseBody.contentLength()
                 val bytesRead = super.read(sink, byteCount)
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                progressListener.update(
-                    totalBytesRead,
-                    responseBody.contentLength(),
-                    bytesRead == -1L
-                )
+                val downloadedPercent = (totalBytesRead / contentLength.toDouble() * 100).toInt()
+                progressEmitter.updateProgress(downloadedPercent, bytesRead == -1L)
                 return bytesRead
             }
         }

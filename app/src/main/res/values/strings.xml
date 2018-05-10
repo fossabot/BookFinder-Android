@@ -7,6 +7,7 @@
     <string name="retry">Retry</string>
     <string name="exit">Exit</string>
     <string name="downloading">Downloading</string>
+    <string name="analyzing">Analyzing</string>
     <string name="parsing">Parsing</string>
     <string name="saving">Saving</string>
     <string name="unzipping">Unzipping</string>
@@ -30,12 +31,9 @@
     <string name="year">Year</string>
     <string name="cover">Cover</string>
     <string name="pages">Pages</string>
-    <string name="id">ID</string>
-    <string name="id2">ID2</string>
     <string name="availability">Availability</string>
-    <string name="deadlines">Deadlines</string>
-    <string name="weight">Weight</string>
     <string name="series">Series</string>
+    <string name="description">Description</string>
 
     <string name="percent" translatable="false">" "(%d%%)</string>
 </resources>
